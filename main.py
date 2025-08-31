@@ -1,6 +1,9 @@
 import os
 import json
 import asyncio
+import hashlib
+import uuid
+import aiofiles
 from datetime import datetime, timezone, timedelta
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import Command
@@ -22,6 +25,11 @@ DATABASE_NAME = os.getenv("DATABASE_NAME", "power_bi_bot")
 DATABASE_USER = os.getenv("DATABASE_USER", "bot_user")
 DATABASE_PASSWORD = os.getenv("DATABASE_PASSWORD", "bot_password")
 PREFIX = os.getenv("TABLE_PREFIX", "edu_")
+
+# Photo configuration
+PHOTO_DIR = os.getenv("PHOTO_DIR", "/tmp/photos")
+PHOTO_URL_BASE = os.getenv("PHOTO_URL_BASE", "http://localhost:8080/photos")
+MAX_PHOTO_SIZE = int(os.getenv("MAX_PHOTO_SIZE", str(10 * 1024 * 1024)))  # 10MB
 
 
 # ==========================
@@ -200,6 +208,39 @@ def floors_keyboard():
 def class_numbers_keyboard():
     return kb([str(i) for i in range(1, 12)], row_size=6)
 
+async def save_photo(bot: Bot, photo: types.PhotoSize) -> str:
+    """Save photo to local storage and return URL"""
+    try:
+        # Create photo directory if it doesn't exist
+        os.makedirs(PHOTO_DIR, exist_ok=True)
+        print(f"📁 Photo directory: {PHOTO_DIR}")
+        
+        # Generate unique filename
+        file_info = await bot.get_file(photo.file_id)
+        print(f"📄 File info: {file_info.file_path}")
+        
+        file_extension = file_info.file_path.split('.')[-1] if '.' in file_info.file_path else 'jpg'
+        unique_id = str(uuid.uuid4())
+        filename = f"{unique_id}.{file_extension}"
+        local_path = os.path.join(PHOTO_DIR, filename)
+        print(f"💾 Saving to: {local_path}")
+        
+        # Download the photo directly to file path
+        await bot.download_file(file_info.file_path, local_path)
+        
+        print(f"✅ Photo saved successfully: {filename}")
+        
+        # Return the URL
+        photo_url = f"{PHOTO_URL_BASE}/{filename}"
+        print(f"🌐 Photo URL: {photo_url}")
+        return photo_url
+        
+    except Exception as e:
+        print(f"❌ Error saving photo: {e}")
+        import traceback
+        traceback.print_exc()
+        return ""
+
 def liter_keyboard():
     letters = ["А","Ә","Б","В","Г","Ғ","Д","Е","Ё","Ж","З","И","Й","К","Қ","Л","М","Н","Ң","О","Ө","П","Р","С","Т","У","Ұ","Ү","Ф","Х","Һ","Ц","Ч","Ш","Щ","Ъ","Ы","І","Ь","Э","Ю","Я"]
     return kb(letters, row_size=8)
@@ -283,6 +324,7 @@ class Survey(StatesGroup):
 
     # Final
     extra_info = State()
+    photo = State()
     need_callback = State()
     contact_info = State()
 
@@ -910,6 +952,45 @@ async def begin_final_questions(message: types.Message, state: FSMContext):
 async def extra_info(message: types.Message, state: FSMContext):
     await state.update_data(extra_info=message.text)
     await message.answer(
+        "6️⃣ Суретті жүктеу / Загрузить фото (міндетті емес / необязательно)\n\n"
+        "Мәселенің суретін жіберіңіз немесе «Жоқ» деп жазыңыз\n"
+        "Отправьте фото проблемы или напишите «Нет»",
+        reply_markup=kb(["Жоқ / Нет"], row_size=1),
+    )
+    await state.set_state(Survey.photo)
+
+@router.message(Survey.photo)
+async def handle_photo(message: types.Message, state: FSMContext, bot: Bot):
+    photo_url = ""
+    
+    if message.photo:
+        # Get the largest photo size
+        largest_photo = message.photo[-1]
+        
+        # Check file size
+        if largest_photo.file_size and largest_photo.file_size > MAX_PHOTO_SIZE:
+            await message.answer(
+                "❌ Сурет тым үлкен! Максимум 10MB / Фото слишком большое! Максимум 10MB"
+            )
+            return
+            
+        # Save photo and get URL
+        photo_url = await save_photo(bot, largest_photo)
+        if photo_url:
+            await message.answer(f"✅ Сурет сақталды / Фото сохранено: {photo_url}")
+        else:
+            await message.answer("❌ Суретті сақтауда қате / Ошибка при сохранении фото")
+    elif message.text and (message.text.startswith("Жоқ") or message.text.startswith("Нет")):
+        photo_url = ""
+        await message.answer("✅ Сурет жоқ / Без фото")
+    else:
+        await message.answer(
+            "Сурет жіберіңіз немесе «Жоқ» деп жазыңыз / Отправьте фото или напишите «Нет»"
+        )
+        return
+    
+    await state.update_data(photo_url=photo_url)
+    await message.answer(
         "7️⃣ Кері байланыс қажет пе? / Нужна ли обратная связь?",
         reply_markup=kb(["Иә / Да", "Жоқ / Нет"], row_size=2),
     )
@@ -999,7 +1080,7 @@ def build_payload(block: str, data: dict) -> dict:
         dv("Date"): date_str,
         dv("Time"): time_str,
         dv("Role"): str(data.get("role", "")),
-        dv("Photo"): "",  # not implemented yet
+        dv("Photo"): str(data.get("photo_url", "")),
         dv("Data_from"): "Telegram Bot",
         dv("Add_inf"): str(data.get("extra_info", "")),
         dv("Contact"): str(data.get("contact_info", "")),
