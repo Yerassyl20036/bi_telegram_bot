@@ -149,3 +149,8 @@ docker-compose down -v
 # Start again (will recreate tables)
 docker-compose up -d
 ```
+clear all the tables
+
+docker exec -i power_bi_postgres psql -U bot_user -d power_bi_bot -c "
+TRUNCATE TABLE dbo.p1, dbo.p2, dbo.p3, dbo.q1, dbo.q2, dbo.q3, dbo.q4, dbo.q5, dbo.s1, dbo.s2, dbo.s3, dbo.s4, dbo.s5, dbo.s6, dbo.s7, dbo.s8 RESTART IDENTITY CASCADE;
+"

@@ -144,9 +144,14 @@ CREATE TABLE IF NOT EXISTS dbo.S8 (
     edu_school VARCHAR(255),
     edu_date DATE,
     edu_time TIME,
-    edu_role VARCHAR(255),
-    edu_problem TEXT,
-    edu_describtion TEXT,
+    edu_digestive_system INTEGER DEFAULT 0,     -- 🍽 Ас қорыту жүйесі / ЖКТ (пищеварительная система)
+    edu_cold_flu INTEGER DEFAULT 0,             -- Тұмау / ОРВИ и простудные заболевания
+    edu_injuries INTEGER DEFAULT 0,             -- 🤕 Жарақаттар / Травмы
+    edu_allergic_reactions INTEGER DEFAULT 0,   -- 🌸 Аллергиялық реакциялар / Аллергические реакции
+    edu_neurological_general INTEGER DEFAULT 0, -- 🧠 Неврологиялық және жалпы жағдай / Неврологические и общее самочувствие
+    edu_chronic_diseases INTEGER DEFAULT 0,     -- ♻️ Созылмалы аурулардың асқынуы / Обострение хронических заболеваний
+    edu_other INTEGER DEFAULT 0,               -- 📌 Басқа / Прочее
+    edu_total_medical INTEGER DEFAULT 0,       -- Барлығы_медицина
     edu_photo VARCHAR(500),
     edu_data_from VARCHAR(100) DEFAULT 'Telegram Bot',
     edu_add_inf TEXT,

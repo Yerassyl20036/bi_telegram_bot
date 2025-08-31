@@ -1,0 +1,944 @@
+2025-08-31 23:26:56,297 - INFO - Starting Excel to PostgreSQL import process
+2025-08-31 23:26:56,298 - INFO - Testing database connection...
+2025-08-31 23:26:56,457 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-08-31 23:26:56,464 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-08-31 23:26:56,464 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-08-31 23:26:56,465 - ERROR - Error reading Excel file: Missing optional dependency 'openpyxl'.  Use pip or conda to install openpyxl.
+2025-08-31 23:26:56,465 - ERROR - Failed to read Excel file: Missing optional dependency 'openpyxl'.  Use pip or conda to install openpyxl.
+2025-08-31 23:27:30,064 - INFO - Starting Excel to PostgreSQL import process
+2025-08-31 23:27:30,064 - INFO - Testing database connection...
+2025-08-31 23:27:30,083 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-08-31 23:27:30,087 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-08-31 23:27:30,087 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-08-31 23:27:30,222 - INFO - Sheet P1: 23 rows, 13 columns
+2025-08-31 23:27:30,222 - INFO - Sheet P2: 26 rows, 15 columns
+2025-08-31 23:27:30,222 - INFO - Sheet P3: 8 rows, 16 columns
+2025-08-31 23:27:30,222 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-08-31 23:27:30,222 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-08-31 23:27:30,222 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-08-31 23:27:30,222 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-08-31 23:27:30,222 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S1: 91 rows, 16 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S2: 24 rows, 17 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S3: 19 rows, 17 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S4: 43 rows, 13 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S5: 29 rows, 13 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S6: 32 rows, 12 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S7: 15 rows, 12 columns
+2025-08-31 23:27:30,222 - INFO - Sheet S8: 13 rows, 16 columns
+2025-08-31 23:27:30,227 - INFO - Processing sheet P1 -> table p1
+2025-08-31 23:27:30,228 - INFO - Sheet P1: Mapped 3 columns
+2025-08-31 23:27:30,250 - INFO - Successfully inserted 23 rows into table p1
+2025-08-31 23:27:30,250 - INFO - Processing sheet P2 -> table p2
+2025-08-31 23:27:30,250 - INFO - Sheet P2: Mapped 3 columns
+2025-08-31 23:27:30,260 - INFO - Successfully inserted 26 rows into table p2
+2025-08-31 23:27:30,260 - INFO - Processing sheet P3 -> table p3
+2025-08-31 23:27:30,260 - INFO - Sheet P3: Mapped 1 columns
+2025-08-31 23:27:30,265 - INFO - Successfully inserted 8 rows into table p3
+2025-08-31 23:27:30,266 - INFO - Processing sheet Q1 -> table q1
+2025-08-31 23:27:30,266 - INFO - Sheet Q1: Mapped 3 columns
+2025-08-31 23:27:30,278 - INFO - Successfully inserted 30 rows into table q1
+2025-08-31 23:27:30,278 - INFO - Processing sheet Q2 -> table q2
+2025-08-31 23:27:30,279 - INFO - Sheet Q2: Mapped 3 columns
+2025-08-31 23:27:30,287 - INFO - Successfully inserted 22 rows into table q2
+2025-08-31 23:27:30,288 - INFO - Processing sheet Q3 -> table q3
+2025-08-31 23:27:30,288 - INFO - Sheet Q3: Mapped 3 columns
+2025-08-31 23:27:30,295 - INFO - Successfully inserted 14 rows into table q3
+2025-08-31 23:27:30,295 - INFO - Processing sheet Q4 -> table q4
+2025-08-31 23:27:30,295 - INFO - Sheet Q4: Mapped 3 columns
+2025-08-31 23:27:30,303 - INFO - Successfully inserted 18 rows into table q4
+2025-08-31 23:27:30,303 - INFO - Processing sheet Q5 -> table q5
+2025-08-31 23:27:30,303 - INFO - Sheet Q5: Mapped 2 columns
+2025-08-31 23:27:30,308 - INFO - Successfully inserted 1 rows into table q5
+2025-08-31 23:27:30,308 - INFO - Processing sheet S1 -> table s1
+2025-08-31 23:27:30,308 - INFO - Sheet S1: Mapped 6 columns
+2025-08-31 23:27:30,336 - INFO - Successfully inserted 91 rows into table s1
+2025-08-31 23:27:30,336 - INFO - Processing sheet S2 -> table s2
+2025-08-31 23:27:30,336 - INFO - Sheet S2: Mapped 2 columns
+2025-08-31 23:27:30,347 - INFO - Successfully inserted 24 rows into table s2
+2025-08-31 23:27:30,347 - INFO - Processing sheet S3 -> table s3
+2025-08-31 23:27:30,348 - INFO - Sheet S3: Mapped 2 columns
+2025-08-31 23:27:30,356 - INFO - Successfully inserted 19 rows into table s3
+2025-08-31 23:27:30,356 - INFO - Processing sheet S4 -> table s4
+2025-08-31 23:27:30,357 - INFO - Sheet S4: Mapped 4 columns
+2025-08-31 23:27:30,369 - INFO - Successfully inserted 43 rows into table s4
+2025-08-31 23:27:30,369 - INFO - Processing sheet S5 -> table s5
+2025-08-31 23:27:30,370 - INFO - Sheet S5: Mapped 4 columns
+2025-08-31 23:27:30,380 - INFO - Successfully inserted 29 rows into table s5
+2025-08-31 23:27:30,380 - INFO - Processing sheet S6 -> table s6
+2025-08-31 23:27:30,380 - INFO - Sheet S6: Mapped 3 columns
+2025-08-31 23:27:30,391 - INFO - Successfully inserted 32 rows into table s6
+2025-08-31 23:27:30,391 - INFO - Processing sheet S7 -> table s7
+2025-08-31 23:27:30,391 - INFO - Sheet S7: Mapped 3 columns
+2025-08-31 23:27:30,398 - INFO - Successfully inserted 15 rows into table s7
+2025-08-31 23:27:30,398 - INFO - Processing sheet S8 -> table s8
+2025-08-31 23:27:30,398 - INFO - Sheet S8: Mapped 2 columns
+2025-08-31 23:27:30,403 - INFO - Successfully inserted 13 rows into table s8
+2025-08-31 23:27:30,403 - INFO - Import completed successfully. Total rows inserted: 408
+2025-08-31 23:37:50,222 - INFO - Starting Excel to PostgreSQL import process
+2025-08-31 23:37:50,222 - INFO - Testing database connection...
+2025-08-31 23:37:50,243 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-08-31 23:37:50,248 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-08-31 23:37:50,248 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-08-31 23:37:50,404 - INFO - Sheet P1: 23 rows, 13 columns
+2025-08-31 23:37:50,405 - INFO - Sheet P2: 26 rows, 15 columns
+2025-08-31 23:37:50,405 - INFO - Sheet P3: 8 rows, 16 columns
+2025-08-31 23:37:50,405 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-08-31 23:37:50,405 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-08-31 23:37:50,405 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-08-31 23:37:50,405 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-08-31 23:37:50,405 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S1: 91 rows, 16 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S2: 24 rows, 17 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S3: 19 rows, 17 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S4: 43 rows, 13 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S5: 29 rows, 13 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S6: 32 rows, 12 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S7: 15 rows, 12 columns
+2025-08-31 23:37:50,405 - INFO - Sheet S8: 13 rows, 16 columns
+2025-08-31 23:37:50,411 - INFO - Processing sheet P1 -> table p1
+2025-08-31 23:37:50,412 - INFO - Sheet P1: Mapped 3 columns
+2025-08-31 23:37:50,461 - INFO - Successfully inserted 23 rows into table p1
+2025-08-31 23:37:50,461 - INFO - Processing sheet P2 -> table p2
+2025-08-31 23:37:50,462 - INFO - Sheet P2: Mapped 3 columns
+2025-08-31 23:37:50,468 - INFO - Successfully inserted 26 rows into table p2
+2025-08-31 23:37:50,468 - INFO - Processing sheet P3 -> table p3
+2025-08-31 23:37:50,469 - INFO - Sheet P3: Mapped 1 columns
+2025-08-31 23:37:50,473 - INFO - Successfully inserted 8 rows into table p3
+2025-08-31 23:37:50,473 - INFO - Processing sheet Q1 -> table q1
+2025-08-31 23:37:50,473 - INFO - Sheet Q1: Mapped 3 columns
+2025-08-31 23:37:50,481 - INFO - Successfully inserted 30 rows into table q1
+2025-08-31 23:37:50,482 - INFO - Processing sheet Q2 -> table q2
+2025-08-31 23:37:50,482 - INFO - Sheet Q2: Mapped 3 columns
+2025-08-31 23:37:50,488 - INFO - Successfully inserted 22 rows into table q2
+2025-08-31 23:37:50,488 - INFO - Processing sheet Q3 -> table q3
+2025-08-31 23:37:50,489 - INFO - Sheet Q3: Mapped 3 columns
+2025-08-31 23:37:50,494 - INFO - Successfully inserted 14 rows into table q3
+2025-08-31 23:37:50,494 - INFO - Processing sheet Q4 -> table q4
+2025-08-31 23:37:50,495 - INFO - Sheet Q4: Mapped 3 columns
+2025-08-31 23:37:50,502 - INFO - Successfully inserted 18 rows into table q4
+2025-08-31 23:37:50,502 - INFO - Processing sheet Q5 -> table q5
+2025-08-31 23:37:50,503 - INFO - Sheet Q5: Mapped 2 columns
+2025-08-31 23:37:50,506 - INFO - Successfully inserted 1 rows into table q5
+2025-08-31 23:37:50,506 - INFO - Processing sheet S1 -> table s1
+2025-08-31 23:37:50,506 - INFO - Sheet S1: Mapped 6 columns
+2025-08-31 23:37:50,542 - INFO - Successfully inserted 91 rows into table s1
+2025-08-31 23:37:50,542 - INFO - Processing sheet S2 -> table s2
+2025-08-31 23:37:50,543 - INFO - Sheet S2: Mapped 2 columns
+2025-08-31 23:37:50,567 - INFO - Successfully inserted 24 rows into table s2
+2025-08-31 23:37:50,567 - INFO - Processing sheet S3 -> table s3
+2025-08-31 23:37:50,570 - INFO - Sheet S3: Mapped 2 columns
+2025-08-31 23:37:50,594 - INFO - Successfully inserted 19 rows into table s3
+2025-08-31 23:37:50,594 - INFO - Processing sheet S4 -> table s4
+2025-08-31 23:37:50,595 - INFO - Sheet S4: Mapped 4 columns
+2025-08-31 23:37:50,620 - INFO - Successfully inserted 43 rows into table s4
+2025-08-31 23:37:50,620 - INFO - Processing sheet S5 -> table s5
+2025-08-31 23:37:50,620 - INFO - Sheet S5: Mapped 4 columns
+2025-08-31 23:37:50,631 - INFO - Successfully inserted 29 rows into table s5
+2025-08-31 23:37:50,631 - INFO - Processing sheet S6 -> table s6
+2025-08-31 23:37:50,631 - INFO - Sheet S6: Mapped 3 columns
+2025-08-31 23:37:50,640 - INFO - Successfully inserted 32 rows into table s6
+2025-08-31 23:37:50,640 - INFO - Processing sheet S7 -> table s7
+2025-08-31 23:37:50,641 - INFO - Sheet S7: Mapped 3 columns
+2025-08-31 23:37:50,647 - INFO - Successfully inserted 15 rows into table s7
+2025-08-31 23:37:50,648 - INFO - Processing sheet S8 -> table s8
+2025-08-31 23:37:50,648 - INFO - Sheet S8: Mapped 2 columns
+2025-08-31 23:37:50,655 - INFO - Successfully inserted 13 rows into table s8
+2025-08-31 23:37:50,655 - INFO - Import completed successfully. Total rows inserted: 408
+2025-08-31 23:41:00,198 - INFO - Starting Excel to PostgreSQL import process
+2025-08-31 23:41:00,199 - INFO - Testing database connection...
+2025-08-31 23:41:00,223 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-08-31 23:41:00,229 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-08-31 23:41:00,229 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-08-31 23:41:00,398 - INFO - Sheet P1: 23 rows, 13 columns
+2025-08-31 23:41:00,399 - INFO - Sheet P2: 26 rows, 15 columns
+2025-08-31 23:41:00,399 - INFO - Sheet P3: 8 rows, 16 columns
+2025-08-31 23:41:00,399 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-08-31 23:41:00,399 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-08-31 23:41:00,399 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-08-31 23:41:00,399 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-08-31 23:41:00,399 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S1: 91 rows, 16 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S2: 24 rows, 17 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S3: 19 rows, 17 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S4: 43 rows, 13 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S5: 29 rows, 13 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S6: 32 rows, 12 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S7: 15 rows, 12 columns
+2025-08-31 23:41:00,399 - INFO - Sheet S8: 13 rows, 16 columns
+2025-08-31 23:41:00,404 - INFO - Processing sheet P1 -> table p1
+2025-08-31 23:41:00,406 - INFO - Sheet P1: Mapped 13 columns
+2025-08-31 23:41:00,421 - ERROR - Error inserting data into table p1: invalid input syntax for type timestamp: "NaT"
+LINE 3: .... Алтынсарина', '2025-08-21T00:00:00'::timestamp, 'NaT'::tim...
+                                                             ^
+
+2025-08-31 23:41:00,421 - ERROR - Error during import process: invalid input syntax for type timestamp: "NaT"
+LINE 3: .... Алтынсарина', '2025-08-21T00:00:00'::timestamp, 'NaT'::tim...
+                                                             ^
+
+2025-08-31 23:43:07,442 - INFO - Starting Excel to PostgreSQL import process
+2025-08-31 23:43:07,443 - INFO - Testing database connection...
+2025-08-31 23:43:07,467 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-08-31 23:43:07,472 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-08-31 23:43:07,472 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-08-31 23:43:07,636 - INFO - Sheet P1: 23 rows, 13 columns
+2025-08-31 23:43:07,636 - INFO - Sheet P2: 26 rows, 15 columns
+2025-08-31 23:43:07,636 - INFO - Sheet P3: 8 rows, 16 columns
+2025-08-31 23:43:07,636 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-08-31 23:43:07,636 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-08-31 23:43:07,636 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-08-31 23:43:07,636 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-08-31 23:43:07,636 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S1: 91 rows, 16 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S2: 24 rows, 17 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S3: 19 rows, 17 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S4: 43 rows, 13 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S5: 29 rows, 13 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S6: 32 rows, 12 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S7: 15 rows, 12 columns
+2025-08-31 23:43:07,636 - INFO - Sheet S8: 13 rows, 16 columns
+2025-08-31 23:43:07,641 - INFO - Processing sheet P1 -> table p1
+2025-08-31 23:43:07,643 - INFO - Sheet P1: Mapped 13 columns
+2025-08-31 23:43:07,664 - INFO - Successfully inserted 23 rows into table p1
+2025-08-31 23:43:07,664 - INFO - Processing sheet P2 -> table p2
+2025-08-31 23:43:07,665 - INFO - Sheet P2: Mapped 3 columns
+2025-08-31 23:43:07,675 - INFO - Successfully inserted 26 rows into table p2
+2025-08-31 23:43:07,675 - INFO - Processing sheet P3 -> table p3
+2025-08-31 23:43:07,676 - INFO - Sheet P3: Mapped 1 columns
+2025-08-31 23:43:07,682 - INFO - Successfully inserted 8 rows into table p3
+2025-08-31 23:43:07,682 - INFO - Processing sheet Q1 -> table q1
+2025-08-31 23:43:07,682 - INFO - Sheet Q1: Mapped 3 columns
+2025-08-31 23:43:07,694 - INFO - Successfully inserted 30 rows into table q1
+2025-08-31 23:43:07,694 - INFO - Processing sheet Q2 -> table q2
+2025-08-31 23:43:07,695 - INFO - Sheet Q2: Mapped 3 columns
+2025-08-31 23:43:07,704 - INFO - Successfully inserted 22 rows into table q2
+2025-08-31 23:43:07,704 - INFO - Processing sheet Q3 -> table q3
+2025-08-31 23:43:07,705 - INFO - Sheet Q3: Mapped 3 columns
+2025-08-31 23:43:07,713 - INFO - Successfully inserted 14 rows into table q3
+2025-08-31 23:43:07,713 - INFO - Processing sheet Q4 -> table q4
+2025-08-31 23:43:07,713 - INFO - Sheet Q4: Mapped 3 columns
+2025-08-31 23:43:07,721 - INFO - Successfully inserted 18 rows into table q4
+2025-08-31 23:43:07,721 - INFO - Processing sheet Q5 -> table q5
+2025-08-31 23:43:07,721 - INFO - Sheet Q5: Mapped 2 columns
+2025-08-31 23:43:07,726 - INFO - Successfully inserted 1 rows into table q5
+2025-08-31 23:43:07,726 - INFO - Processing sheet S1 -> table s1
+2025-08-31 23:43:07,726 - INFO - Sheet S1: Mapped 6 columns
+2025-08-31 23:43:07,758 - INFO - Successfully inserted 91 rows into table s1
+2025-08-31 23:43:07,758 - INFO - Processing sheet S2 -> table s2
+2025-08-31 23:43:07,758 - INFO - Sheet S2: Mapped 2 columns
+2025-08-31 23:43:07,768 - INFO - Successfully inserted 24 rows into table s2
+2025-08-31 23:43:07,768 - INFO - Processing sheet S3 -> table s3
+2025-08-31 23:43:07,769 - INFO - Sheet S3: Mapped 2 columns
+2025-08-31 23:43:07,778 - INFO - Successfully inserted 19 rows into table s3
+2025-08-31 23:43:07,778 - INFO - Processing sheet S4 -> table s4
+2025-08-31 23:43:07,778 - INFO - Sheet S4: Mapped 4 columns
+2025-08-31 23:43:07,793 - INFO - Successfully inserted 43 rows into table s4
+2025-08-31 23:43:07,793 - INFO - Processing sheet S5 -> table s5
+2025-08-31 23:43:07,794 - INFO - Sheet S5: Mapped 4 columns
+2025-08-31 23:43:07,806 - INFO - Successfully inserted 29 rows into table s5
+2025-08-31 23:43:07,807 - INFO - Processing sheet S6 -> table s6
+2025-08-31 23:43:07,807 - INFO - Sheet S6: Mapped 3 columns
+2025-08-31 23:43:07,817 - INFO - Successfully inserted 32 rows into table s6
+2025-08-31 23:43:07,817 - INFO - Processing sheet S7 -> table s7
+2025-08-31 23:43:07,818 - INFO - Sheet S7: Mapped 3 columns
+2025-08-31 23:43:07,826 - INFO - Successfully inserted 15 rows into table s7
+2025-08-31 23:43:07,826 - INFO - Processing sheet S8 -> table s8
+2025-08-31 23:43:07,827 - INFO - Sheet S8: Mapped 2 columns
+2025-08-31 23:43:07,833 - INFO - Successfully inserted 13 rows into table s8
+2025-08-31 23:43:07,833 - INFO - Import completed successfully. Total rows inserted: 408
+2025-08-31 23:45:42,261 - INFO - Starting Excel to PostgreSQL import process
+2025-08-31 23:45:42,262 - INFO - Testing database connection...
+2025-08-31 23:45:42,280 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-08-31 23:45:42,285 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-08-31 23:45:42,285 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-08-31 23:45:42,437 - INFO - Sheet P1: 23 rows, 13 columns
+2025-08-31 23:45:42,437 - INFO - Sheet P2: 26 rows, 15 columns
+2025-08-31 23:45:42,437 - INFO - Sheet P3: 8 rows, 16 columns
+2025-08-31 23:45:42,437 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-08-31 23:45:42,438 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-08-31 23:45:42,438 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-08-31 23:45:42,438 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-08-31 23:45:42,438 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S1: 91 rows, 16 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S2: 24 rows, 17 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S3: 19 rows, 17 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S4: 43 rows, 13 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S5: 29 rows, 13 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S6: 32 rows, 12 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S7: 15 rows, 12 columns
+2025-08-31 23:45:42,438 - INFO - Sheet S8: 13 rows, 16 columns
+2025-08-31 23:45:42,443 - INFO - Processing sheet P1 -> table p1
+2025-08-31 23:45:42,444 - INFO - Sheet P1: Mapped 13 columns
+2025-08-31 23:45:42,465 - INFO - Successfully inserted 23 rows into table p1
+2025-08-31 23:45:42,466 - INFO - Processing sheet P2 -> table p2
+2025-08-31 23:45:42,466 - INFO - Sheet P2: Mapped 3 columns
+2025-08-31 23:45:42,476 - INFO - Successfully inserted 26 rows into table p2
+2025-08-31 23:45:42,476 - INFO - Processing sheet P3 -> table p3
+2025-08-31 23:45:42,477 - INFO - Sheet P3: Mapped 1 columns
+2025-08-31 23:45:42,483 - INFO - Successfully inserted 8 rows into table p3
+2025-08-31 23:45:42,483 - INFO - Processing sheet Q1 -> table q1
+2025-08-31 23:45:42,484 - INFO - Sheet Q1: Mapped 3 columns
+2025-08-31 23:45:42,496 - INFO - Successfully inserted 30 rows into table q1
+2025-08-31 23:45:42,496 - INFO - Processing sheet Q2 -> table q2
+2025-08-31 23:45:42,496 - INFO - Sheet Q2: Mapped 3 columns
+2025-08-31 23:45:42,505 - INFO - Successfully inserted 22 rows into table q2
+2025-08-31 23:45:42,505 - INFO - Processing sheet Q3 -> table q3
+2025-08-31 23:45:42,506 - INFO - Sheet Q3: Mapped 3 columns
+2025-08-31 23:45:42,513 - INFO - Successfully inserted 14 rows into table q3
+2025-08-31 23:45:42,513 - INFO - Processing sheet Q4 -> table q4
+2025-08-31 23:45:42,514 - INFO - Sheet Q4: Mapped 3 columns
+2025-08-31 23:45:42,522 - INFO - Successfully inserted 18 rows into table q4
+2025-08-31 23:45:42,523 - INFO - Processing sheet Q5 -> table q5
+2025-08-31 23:45:42,523 - INFO - Sheet Q5: Mapped 2 columns
+2025-08-31 23:45:42,527 - INFO - Successfully inserted 1 rows into table q5
+2025-08-31 23:45:42,527 - INFO - Processing sheet S1 -> table s1
+2025-08-31 23:45:42,527 - INFO - Sheet S1: Mapped 6 columns
+2025-08-31 23:45:42,559 - INFO - Successfully inserted 91 rows into table s1
+2025-08-31 23:45:42,559 - INFO - Processing sheet S2 -> table s2
+2025-08-31 23:45:42,560 - INFO - Sheet S2: Mapped 2 columns
+2025-08-31 23:45:42,577 - INFO - Successfully inserted 24 rows into table s2
+2025-08-31 23:45:42,577 - INFO - Processing sheet S3 -> table s3
+2025-08-31 23:45:42,577 - INFO - Sheet S3: Mapped 2 columns
+2025-08-31 23:45:42,590 - INFO - Successfully inserted 19 rows into table s3
+2025-08-31 23:45:42,590 - INFO - Processing sheet S4 -> table s4
+2025-08-31 23:45:42,591 - INFO - Sheet S4: Mapped 4 columns
+2025-08-31 23:45:42,610 - INFO - Successfully inserted 43 rows into table s4
+2025-08-31 23:45:42,610 - INFO - Processing sheet S5 -> table s5
+2025-08-31 23:45:42,610 - INFO - Sheet S5: Mapped 4 columns
+2025-08-31 23:45:42,628 - INFO - Successfully inserted 29 rows into table s5
+2025-08-31 23:45:42,628 - INFO - Processing sheet S6 -> table s6
+2025-08-31 23:45:42,628 - INFO - Sheet S6: Mapped 3 columns
+2025-08-31 23:45:42,646 - INFO - Successfully inserted 32 rows into table s6
+2025-08-31 23:45:42,646 - INFO - Processing sheet S7 -> table s7
+2025-08-31 23:45:42,647 - INFO - Sheet S7: Mapped 3 columns
+2025-08-31 23:45:42,655 - INFO - Successfully inserted 15 rows into table s7
+2025-08-31 23:45:42,655 - INFO - Processing sheet S8 -> table s8
+2025-08-31 23:45:42,655 - INFO - Sheet S8: Mapped 2 columns
+2025-08-31 23:45:42,668 - INFO - Successfully inserted 13 rows into table s8
+2025-08-31 23:45:42,669 - INFO - Import completed successfully. Total rows inserted: 408
+2025-09-01 00:00:14,084 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:00:14,084 - INFO - Testing database connection...
+2025-09-01 00:00:14,087 - ERROR - Error connecting to database: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-09-01 00:00:14,087 - ERROR - Database connection test failed: connection to server at "localhost" (::1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "localhost" (127.0.0.1), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+
+2025-09-01 00:00:14,087 - ERROR - Database connection failed. Exiting.
+2025-09-01 00:00:27,324 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:00:27,325 - INFO - Testing database connection...
+2025-09-01 00:00:27,352 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:00:27,355 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:00:27,356 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:00:27,531 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:00:27,532 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:00:27,532 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:00:27,532 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:00:27,532 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:00:27,532 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:00:27,532 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:00:27,532 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:00:27,532 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:00:27,535 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:00:27,537 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:00:27,563 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:00:27,563 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:00:27,564 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:00:27,582 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:00:27,582 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:00:27,582 - INFO - Sheet P3: Mapped 9 columns
+2025-09-01 00:00:27,591 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:00:27,591 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:00:27,592 - INFO - Sheet Q1: Mapped 3 columns
+2025-09-01 00:00:27,609 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:00:27,609 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:00:27,609 - INFO - Sheet Q2: Mapped 3 columns
+2025-09-01 00:00:27,626 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:00:27,627 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:00:27,629 - INFO - Sheet Q3: Mapped 3 columns
+2025-09-01 00:00:27,642 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:00:27,642 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:00:27,643 - INFO - Sheet Q4: Mapped 3 columns
+2025-09-01 00:00:27,651 - INFO - Successfully inserted 18 rows into table q4
+2025-09-01 00:00:27,651 - INFO - Processing sheet Q5 -> table q5
+2025-09-01 00:00:27,651 - INFO - Sheet Q5: Mapped 2 columns
+2025-09-01 00:00:27,657 - INFO - Successfully inserted 1 rows into table q5
+2025-09-01 00:00:27,657 - INFO - Processing sheet S1 -> table s1
+2025-09-01 00:00:27,658 - INFO - Sheet S1: Mapped 6 columns
+2025-09-01 00:00:27,693 - INFO - Successfully inserted 91 rows into table s1
+2025-09-01 00:00:27,694 - INFO - Processing sheet S2 -> table s2
+2025-09-01 00:00:27,694 - INFO - Sheet S2: Mapped 2 columns
+2025-09-01 00:00:27,710 - INFO - Successfully inserted 24 rows into table s2
+2025-09-01 00:00:27,710 - INFO - Processing sheet S3 -> table s3
+2025-09-01 00:00:27,711 - INFO - Sheet S3: Mapped 2 columns
+2025-09-01 00:00:27,730 - INFO - Successfully inserted 19 rows into table s3
+2025-09-01 00:00:27,731 - INFO - Processing sheet S4 -> table s4
+2025-09-01 00:00:27,731 - INFO - Sheet S4: Mapped 4 columns
+2025-09-01 00:00:27,746 - INFO - Successfully inserted 43 rows into table s4
+2025-09-01 00:00:27,747 - INFO - Processing sheet S5 -> table s5
+2025-09-01 00:00:27,747 - INFO - Sheet S5: Mapped 4 columns
+2025-09-01 00:00:27,757 - INFO - Successfully inserted 29 rows into table s5
+2025-09-01 00:00:27,757 - INFO - Processing sheet S6 -> table s6
+2025-09-01 00:00:27,757 - INFO - Sheet S6: Mapped 3 columns
+2025-09-01 00:00:27,822 - INFO - Successfully inserted 32 rows into table s6
+2025-09-01 00:00:27,823 - INFO - Processing sheet S7 -> table s7
+2025-09-01 00:00:27,823 - INFO - Sheet S7: Mapped 3 columns
+2025-09-01 00:00:27,832 - INFO - Successfully inserted 15 rows into table s7
+2025-09-01 00:00:27,832 - INFO - Processing sheet S8 -> table s8
+2025-09-01 00:00:27,833 - INFO - Sheet S8: Mapped 2 columns
+2025-09-01 00:00:27,840 - INFO - Successfully inserted 13 rows into table s8
+2025-09-01 00:00:27,840 - INFO - Import completed successfully. Total rows inserted: 408
+2025-09-01 00:05:28,692 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:05:28,692 - INFO - Testing database connection...
+2025-09-01 00:05:28,714 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:05:28,718 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:05:28,718 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:05:28,873 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:05:28,873 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:05:28,873 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:05:28,873 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:05:28,873 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:05:28,873 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:05:28,873 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:05:28,873 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:05:28,873 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:05:28,873 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:05:28,873 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:05:28,873 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:05:28,873 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:05:28,873 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:05:28,874 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:05:28,874 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:05:28,878 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:05:28,879 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:05:28,900 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:05:28,900 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:05:28,901 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:05:28,912 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:05:28,913 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:05:28,913 - INFO - Sheet P3: Mapped 9 columns
+2025-09-01 00:05:28,920 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:05:28,920 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:05:28,921 - INFO - Sheet Q1: Mapped 3 columns
+2025-09-01 00:05:28,976 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:05:28,977 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:05:28,978 - INFO - Sheet Q2: Mapped 3 columns
+2025-09-01 00:05:29,005 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:05:29,005 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:05:29,006 - INFO - Sheet Q3: Mapped 3 columns
+2025-09-01 00:05:29,013 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:05:29,013 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:05:29,013 - INFO - Sheet Q4: Mapped 3 columns
+2025-09-01 00:05:29,021 - INFO - Successfully inserted 18 rows into table q4
+2025-09-01 00:05:29,021 - INFO - Processing sheet Q5 -> table q5
+2025-09-01 00:05:29,022 - INFO - Sheet Q5: Mapped 2 columns
+2025-09-01 00:05:29,025 - INFO - Successfully inserted 1 rows into table q5
+2025-09-01 00:05:29,025 - INFO - Processing sheet S1 -> table s1
+2025-09-01 00:05:29,025 - INFO - Sheet S1: Mapped 6 columns
+2025-09-01 00:05:29,056 - INFO - Successfully inserted 91 rows into table s1
+2025-09-01 00:05:29,056 - INFO - Processing sheet S2 -> table s2
+2025-09-01 00:05:29,056 - INFO - Sheet S2: Mapped 2 columns
+2025-09-01 00:05:29,066 - INFO - Successfully inserted 24 rows into table s2
+2025-09-01 00:05:29,066 - INFO - Processing sheet S3 -> table s3
+2025-09-01 00:05:29,067 - INFO - Sheet S3: Mapped 2 columns
+2025-09-01 00:05:29,076 - INFO - Successfully inserted 19 rows into table s3
+2025-09-01 00:05:29,077 - INFO - Processing sheet S4 -> table s4
+2025-09-01 00:05:29,077 - INFO - Sheet S4: Mapped 4 columns
+2025-09-01 00:05:29,094 - INFO - Successfully inserted 43 rows into table s4
+2025-09-01 00:05:29,094 - INFO - Processing sheet S5 -> table s5
+2025-09-01 00:05:29,094 - INFO - Sheet S5: Mapped 4 columns
+2025-09-01 00:05:29,107 - INFO - Successfully inserted 29 rows into table s5
+2025-09-01 00:05:29,107 - INFO - Processing sheet S6 -> table s6
+2025-09-01 00:05:29,107 - INFO - Sheet S6: Mapped 3 columns
+2025-09-01 00:05:29,119 - INFO - Successfully inserted 32 rows into table s6
+2025-09-01 00:05:29,119 - INFO - Processing sheet S7 -> table s7
+2025-09-01 00:05:29,119 - INFO - Sheet S7: Mapped 3 columns
+2025-09-01 00:05:29,127 - INFO - Successfully inserted 15 rows into table s7
+2025-09-01 00:05:29,127 - INFO - Processing sheet S8 -> table s8
+2025-09-01 00:05:29,127 - INFO - Sheet S8: Mapped 2 columns
+2025-09-01 00:05:29,134 - INFO - Successfully inserted 13 rows into table s8
+2025-09-01 00:05:29,134 - INFO - Import completed successfully. Total rows inserted: 408
+2025-09-01 00:10:10,095 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:10:10,095 - INFO - Testing database connection...
+2025-09-01 00:10:10,121 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:10:10,125 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:10:10,125 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:10:10,283 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:10:10,283 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:10:10,283 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:10:10,283 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:10:10,283 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:10:10,283 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:10:10,283 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:10:10,284 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:10:10,284 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:10:10,290 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:10:10,292 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:10:10,325 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:10:10,325 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:10:10,325 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:10:10,367 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:10:10,367 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:10:10,367 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:10:10,367 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂 Эмоциялық жағдай / Эмоциональное состояние', '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫 Буллинг / кибербуллинг', '📖 Оқудағы мәселелер / Проблемы в обучении', '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации', '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌 Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:10:10,367 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:10:10,367 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:10:10,368 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:10:10,368 - INFO - Sheet P3: Mapped 9 columns
+2025-09-01 00:10:10,376 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:10:10,376 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:10:10,376 - INFO - Sheet Q1: Mapped 3 columns
+2025-09-01 00:10:10,389 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:10:10,389 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:10:10,389 - INFO - Sheet Q2: Mapped 3 columns
+2025-09-01 00:10:10,400 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:10:10,400 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:10:10,401 - INFO - Sheet Q3: Mapped 3 columns
+2025-09-01 00:10:10,410 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:10:10,410 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:10:10,411 - INFO - Sheet Q4: Mapped 3 columns
+2025-09-01 00:10:10,421 - INFO - Successfully inserted 18 rows into table q4
+2025-09-01 00:10:10,421 - INFO - Processing sheet Q5 -> table q5
+2025-09-01 00:10:10,421 - INFO - Sheet Q5: Mapped 2 columns
+2025-09-01 00:10:10,425 - INFO - Successfully inserted 1 rows into table q5
+2025-09-01 00:10:10,425 - INFO - Processing sheet S1 -> table s1
+2025-09-01 00:10:10,425 - INFO - Sheet S1: Mapped 6 columns
+2025-09-01 00:10:10,454 - INFO - Successfully inserted 91 rows into table s1
+2025-09-01 00:10:10,455 - INFO - Processing sheet S2 -> table s2
+2025-09-01 00:10:10,455 - INFO - Sheet S2: Mapped 2 columns
+2025-09-01 00:10:10,465 - INFO - Successfully inserted 24 rows into table s2
+2025-09-01 00:10:10,465 - INFO - Processing sheet S3 -> table s3
+2025-09-01 00:10:10,466 - INFO - Sheet S3: Mapped 2 columns
+2025-09-01 00:10:10,475 - INFO - Successfully inserted 19 rows into table s3
+2025-09-01 00:10:10,476 - INFO - Processing sheet S4 -> table s4
+2025-09-01 00:10:10,476 - INFO - Sheet S4: Mapped 4 columns
+2025-09-01 00:10:10,491 - INFO - Successfully inserted 43 rows into table s4
+2025-09-01 00:10:10,491 - INFO - Processing sheet S5 -> table s5
+2025-09-01 00:10:10,491 - INFO - Sheet S5: Mapped 4 columns
+2025-09-01 00:10:10,502 - INFO - Successfully inserted 29 rows into table s5
+2025-09-01 00:10:10,502 - INFO - Processing sheet S6 -> table s6
+2025-09-01 00:10:10,502 - INFO - Sheet S6: Mapped 3 columns
+2025-09-01 00:10:10,516 - INFO - Successfully inserted 32 rows into table s6
+2025-09-01 00:10:10,516 - INFO - Processing sheet S7 -> table s7
+2025-09-01 00:10:10,516 - INFO - Sheet S7: Mapped 3 columns
+2025-09-01 00:10:10,523 - INFO - Successfully inserted 15 rows into table s7
+2025-09-01 00:10:10,523 - INFO - Processing sheet S8 -> table s8
+2025-09-01 00:10:10,523 - INFO - Sheet S8: Mapped 2 columns
+2025-09-01 00:10:10,531 - INFO - Successfully inserted 13 rows into table s8
+2025-09-01 00:10:10,531 - INFO - Import completed successfully. Total rows inserted: 408
+2025-09-01 00:28:08,866 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:28:08,867 - INFO - Testing database connection...
+2025-09-01 00:28:08,887 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:28:08,891 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:28:08,891 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:28:09,043 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:28:09,043 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:28:09,043 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:28:09,043 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:28:09,043 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:28:09,044 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:28:09,044 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:28:09,044 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:28:09,044 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:28:09,050 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:28:09,051 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:28:09,071 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:28:09,071 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:28:09,071 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:28:09,084 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:28:09,084 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:28:09,084 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:28:09,084 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂 Эмоциялық жағдай / Эмоциональное состояние', '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫 Буллинг / кибербуллинг', '📖 Оқудағы мәселелер / Проблемы в обучении', '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации', '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌 Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:28:09,084 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:28:09,084 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:28:09,085 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:28:09,085 - INFO - Sheet P3: Mapped 9 columns
+2025-09-01 00:28:09,093 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:28:09,094 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:28:09,094 - INFO - Sheet Q1: Mapped 16 columns
+2025-09-01 00:28:09,110 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:28:09,110 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:28:09,110 - INFO - Sheet Q2: Mapped 15 columns
+2025-09-01 00:28:09,122 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:28:09,122 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:28:09,123 - INFO - Sheet Q3: Mapped 15 columns
+2025-09-01 00:28:09,132 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:28:09,132 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:28:09,133 - INFO - Sheet Q4: Mapped 13 columns
+2025-09-01 00:28:09,139 - ERROR - Error inserting data into table q4: 'DataFrame' object has no attribute 'dtype'
+2025-09-01 00:28:09,139 - ERROR - Error during import process: 'DataFrame' object has no attribute 'dtype'
+2025-09-01 00:29:42,442 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:29:42,442 - INFO - Testing database connection...
+2025-09-01 00:29:42,464 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:29:42,470 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:29:42,470 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:29:42,659 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:29:42,659 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:29:42,659 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:29:42,659 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:29:42,659 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:29:42,659 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:29:42,659 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:29:42,659 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:29:42,659 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:29:42,659 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:29:42,659 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:29:42,659 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:29:42,660 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:29:42,660 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:29:42,660 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:29:42,660 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:29:42,664 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:29:42,665 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:29:42,689 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:29:42,689 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:29:42,689 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:29:42,703 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:29:42,703 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:29:42,703 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:29:42,703 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:29:42,703 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние': 'edu_emotional_state', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения': 'edu_conflicts_relations', '🚫\xa0Буллинг / кибербуллинг': 'edu_bullying_cyberbullying', '📖\xa0Оқудағы мәселелер / Проблемы в обучении': 'edu_learning_problems', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации': 'edu_crisis_situations', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация': 'edu_preventive_consultation', '📌\xa0Басқа / Прочее': 'edu_other', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:29:42,703 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:29:42,703 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:29:42,704 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:29:42,704 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:29:42,704 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:29:42,704 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:29:42,704 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:29:42,704 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:29:42,704 - INFO - Sheet P3: Mapped 16 columns
+2025-09-01 00:29:42,712 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:29:42,712 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:29:42,712 - INFO - Sheet Q1: Mapped 16 columns
+2025-09-01 00:29:42,728 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:29:42,729 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:29:42,729 - INFO - Sheet Q2: Mapped 15 columns
+2025-09-01 00:29:42,747 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:29:42,747 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:29:42,747 - INFO - Sheet Q3: Mapped 15 columns
+2025-09-01 00:29:42,758 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:29:42,758 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:29:42,758 - INFO - Sheet Q4: Mapped 13 columns
+2025-09-01 00:29:42,765 - ERROR - Error inserting data into table q4: 'DataFrame' object has no attribute 'dtype'
+2025-09-01 00:29:42,765 - ERROR - Error during import process: 'DataFrame' object has no attribute 'dtype'
+2025-09-01 00:30:26,977 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:30:26,977 - INFO - Testing database connection...
+2025-09-01 00:30:26,999 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:30:27,003 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:30:27,004 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:30:27,165 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:30:27,165 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:30:27,165 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:30:27,165 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:30:27,165 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:30:27,165 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:30:27,165 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:30:27,165 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:30:27,165 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:30:27,166 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:30:27,172 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:30:27,173 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:30:27,199 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:30:27,199 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:30:27,200 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:30:27,212 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:30:27,212 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние': 'edu_emotional_state', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения': 'edu_conflicts_relations', '🚫\xa0Буллинг / кибербуллинг': 'edu_bullying_cyberbullying', '📖\xa0Оқудағы мәселелер / Проблемы в обучении': 'edu_learning_problems', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации': 'edu_crisis_situations', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация': 'edu_preventive_consultation', '📌\xa0Басқа / Прочее': 'edu_other', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:30:27,212 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:30:27,213 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:30:27,213 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:30:27,213 - INFO - Sheet P3: Mapped 16 columns
+2025-09-01 00:30:27,219 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:30:27,220 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:30:27,220 - INFO - Sheet Q1: Mapped 16 columns
+2025-09-01 00:30:27,234 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:30:27,235 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:30:27,235 - INFO - Sheet Q2: Mapped 15 columns
+2025-09-01 00:30:27,248 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:30:27,248 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:30:27,248 - INFO - Sheet Q3: Mapped 15 columns
+2025-09-01 00:30:27,257 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:30:27,257 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:30:27,258 - INFO - Sheet Q4: Mapped 13 columns
+2025-09-01 00:30:27,266 - ERROR - Error inserting data into table q4: not all arguments converted during string formatting
+2025-09-01 00:30:27,267 - ERROR - Error during import process: not all arguments converted during string formatting
+2025-09-01 00:31:57,553 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:31:57,553 - INFO - Testing database connection...
+2025-09-01 00:31:57,582 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:31:57,587 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:31:57,587 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:31:57,768 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:31:57,768 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:31:57,768 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:31:57,768 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:31:57,768 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:31:57,768 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:31:57,768 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:31:57,768 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:31:57,768 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:31:57,773 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:31:57,774 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:31:57,801 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:31:57,801 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:31:57,801 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:31:57,815 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:31:57,815 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:31:57,815 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:31:57,815 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:31:57,815 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние': 'edu_emotional_state', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения': 'edu_conflicts_relations', '🚫\xa0Буллинг / кибербуллинг': 'edu_bullying_cyberbullying', '📖\xa0Оқудағы мәселелер / Проблемы в обучении': 'edu_learning_problems', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации': 'edu_crisis_situations', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация': 'edu_preventive_consultation', '📌\xa0Басқа / Прочее': 'edu_other', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:31:57,815 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:31:57,816 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:31:57,816 - INFO - Sheet P3: Mapped 16 columns
+2025-09-01 00:31:57,824 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:31:57,824 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:31:57,825 - INFO - Sheet Q1: Mapped 16 columns
+2025-09-01 00:31:57,839 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:31:57,839 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:31:57,839 - INFO - Sheet Q2: Mapped 15 columns
+2025-09-01 00:31:57,853 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:31:57,853 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:31:57,853 - INFO - Sheet Q3: Mapped 15 columns
+2025-09-01 00:31:57,862 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:31:57,863 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:31:57,863 - INFO - Sheet Q4: Mapped 12 columns
+2025-09-01 00:31:57,875 - INFO - Successfully inserted 18 rows into table q4
+2025-09-01 00:31:57,875 - INFO - Processing sheet Q5 -> table q5
+2025-09-01 00:31:57,875 - INFO - Sheet Q5: Mapped 8 columns
+2025-09-01 00:31:57,880 - INFO - Successfully inserted 1 rows into table q5
+2025-09-01 00:31:57,880 - INFO - Processing sheet S1 -> table s1
+2025-09-01 00:31:57,880 - INFO - Sheet S1: Mapped 16 columns
+2025-09-01 00:31:57,888 - ERROR - Error inserting data into table s1: value too long for type character varying(500)
+
+2025-09-01 00:31:57,888 - ERROR - Error during import process: value too long for type character varying(500)
+
+2025-09-01 00:32:28,863 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:32:28,863 - INFO - Testing database connection...
+2025-09-01 00:32:28,887 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:32:28,888 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:32:28,889 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:32:29,053 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:32:29,053 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:32:29,053 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:32:29,053 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:32:29,053 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:32:29,053 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:32:29,053 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:32:29,053 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:32:29,054 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:32:29,059 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:32:29,060 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:32:29,084 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:32:29,084 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:32:29,084 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:32:29,098 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:32:29,098 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние': 'edu_emotional_state', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения': 'edu_conflicts_relations', '🚫\xa0Буллинг / кибербуллинг': 'edu_bullying_cyberbullying', '📖\xa0Оқудағы мәселелер / Проблемы в обучении': 'edu_learning_problems', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации': 'edu_crisis_situations', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация': 'edu_preventive_consultation', '📌\xa0Басқа / Прочее': 'edu_other', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:32:29,098 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:32:29,099 - INFO - Sheet P3: Mapped 16 columns
+2025-09-01 00:32:29,106 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:32:29,106 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:32:29,106 - INFO - Sheet Q1: Mapped 16 columns
+2025-09-01 00:32:29,121 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:32:29,121 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:32:29,122 - INFO - Sheet Q2: Mapped 15 columns
+2025-09-01 00:32:29,137 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:32:29,137 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:32:29,137 - INFO - Sheet Q3: Mapped 15 columns
+2025-09-01 00:32:29,151 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:32:29,151 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:32:29,151 - INFO - Sheet Q4: Mapped 12 columns
+2025-09-01 00:32:29,160 - INFO - Successfully inserted 18 rows into table q4
+2025-09-01 00:32:29,160 - INFO - Processing sheet Q5 -> table q5
+2025-09-01 00:32:29,161 - INFO - Sheet Q5: Mapped 8 columns
+2025-09-01 00:32:29,166 - INFO - Successfully inserted 1 rows into table q5
+2025-09-01 00:32:29,166 - INFO - Processing sheet S1 -> table s1
+2025-09-01 00:32:29,166 - INFO - Sheet S1: Mapped 16 columns
+2025-09-01 00:32:29,171 - WARNING - Truncating long text in s1: [{"name":"image_Ержан Жиренбай.jpg","link":"https:...
+2025-09-01 00:32:29,201 - INFO - Successfully inserted 91 rows into table s1
+2025-09-01 00:32:29,201 - INFO - Processing sheet S2 -> table s2
+2025-09-01 00:32:29,201 - INFO - Sheet S2: Mapped 17 columns
+2025-09-01 00:32:29,213 - INFO - Successfully inserted 24 rows into table s2
+2025-09-01 00:32:29,214 - INFO - Processing sheet S3 -> table s3
+2025-09-01 00:32:29,214 - INFO - Sheet S3: Mapped 17 columns
+2025-09-01 00:32:29,224 - INFO - Successfully inserted 19 rows into table s3
+2025-09-01 00:32:29,225 - INFO - Processing sheet S4 -> table s4
+2025-09-01 00:32:29,225 - INFO - Sheet S4: Mapped 13 columns
+2025-09-01 00:32:29,230 - WARNING - Truncating long text in s4: [{"name":"17557482241511191039183376660974_Балкан ...
+2025-09-01 00:32:29,230 - WARNING - Truncating long text in s4: [{"name":"17557482241511191039183376660974_Балкан ...
+2025-09-01 00:32:29,248 - INFO - Successfully inserted 43 rows into table s4
+2025-09-01 00:32:29,248 - INFO - Processing sheet S5 -> table s5
+2025-09-01 00:32:29,248 - INFO - Sheet S5: Mapped 13 columns
+2025-09-01 00:32:29,261 - INFO - Successfully inserted 29 rows into table s5
+2025-09-01 00:32:29,261 - INFO - Processing sheet S6 -> table s6
+2025-09-01 00:32:29,261 - INFO - Sheet S6: Mapped 12 columns
+2025-09-01 00:32:29,277 - INFO - Successfully inserted 32 rows into table s6
+2025-09-01 00:32:29,278 - INFO - Processing sheet S7 -> table s7
+2025-09-01 00:32:29,278 - INFO - Sheet S7: Mapped 12 columns
+2025-09-01 00:32:29,288 - INFO - Successfully inserted 15 rows into table s7
+2025-09-01 00:32:29,288 - INFO - Processing sheet S8 -> table s8
+2025-09-01 00:32:29,288 - INFO - Sheet S8: Mapped 9 columns
+2025-09-01 00:32:29,298 - INFO - Successfully inserted 13 rows into table s8
+2025-09-01 00:32:29,298 - INFO - Import completed successfully. Total rows inserted: 408
+2025-09-01 00:43:45,138 - INFO - Starting Excel to PostgreSQL import process
+2025-09-01 00:43:45,138 - INFO - Testing database connection...
+2025-09-01 00:43:45,161 - INFO - PostgreSQL version: PostgreSQL 15.14 (Debian 15.14-1.pgdg13+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2025-09-01 00:43:45,163 - INFO - Found tables: ['p1', 'p2', 'p3', 'q1', 'q2', 'q3', 'q4', 'q5', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8']
+2025-09-01 00:43:45,163 - INFO - Reading Excel file: Data_DM (3).xlsx
+2025-09-01 00:43:45,327 - INFO - Sheet P1: 23 rows, 13 columns
+2025-09-01 00:43:45,327 - INFO - Sheet P2: 26 rows, 15 columns
+2025-09-01 00:43:45,327 - INFO - Sheet P3: 8 rows, 16 columns
+2025-09-01 00:43:45,327 - INFO - Sheet Q1: 30 rows, 16 columns
+2025-09-01 00:43:45,327 - INFO - Sheet Q2: 22 rows, 15 columns
+2025-09-01 00:43:45,327 - INFO - Sheet Q3: 14 rows, 15 columns
+2025-09-01 00:43:45,327 - INFO - Sheet Q4: 18 rows, 13 columns
+2025-09-01 00:43:45,327 - INFO - Sheet Q5: 1 rows, 14 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S1: 91 rows, 16 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S2: 24 rows, 17 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S3: 19 rows, 17 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S4: 43 rows, 13 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S5: 29 rows, 13 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S6: 32 rows, 12 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S7: 15 rows, 12 columns
+2025-09-01 00:43:45,327 - INFO - Sheet S8: 13 rows, 16 columns
+2025-09-01 00:43:45,336 - INFO - Processing sheet P1 -> table p1
+2025-09-01 00:43:45,337 - INFO - Sheet P1: Mapped 13 columns
+2025-09-01 00:43:45,358 - INFO - Successfully inserted 23 rows into table p1
+2025-09-01 00:43:45,358 - INFO - Processing sheet P2 -> table p2
+2025-09-01 00:43:45,359 - INFO - Sheet P2: Mapped 15 columns
+2025-09-01 00:43:45,372 - INFO - Successfully inserted 26 rows into table p2
+2025-09-01 00:43:45,372 - INFO - Processing sheet P3 -> table p3
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Excel columns: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Mapping attempted: ['ID', 'Мектеп', 'Дата', 'Время обхода', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее', 'Барлығы_психолог', 'Фото/ссылка_безопасность', 'Источник данных', 'Примечание (сюда входит пояснение про сломанный инвентарь)', 'контакты по обратной связи_безопасность']
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Successful mappings: {'ID': 'id', 'Мектеп': 'edu_school', 'Дата': 'edu_date', 'Время обхода': 'edu_time', '🙂\xa0Эмоциялық жағдай / Эмоциональное состояние': 'edu_emotional_state', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения': 'edu_conflicts_relations', '🚫\xa0Буллинг / кибербуллинг': 'edu_bullying_cyberbullying', '📖\xa0Оқудағы мәселелер / Проблемы в обучении': 'edu_learning_problems', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации': 'edu_crisis_situations', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация': 'edu_preventive_consultation', '📌\xa0Басқа / Прочее': 'edu_other', 'Барлығы_психолог': 'edu_total_psychologist', 'Фото/ссылка_безопасность': 'edu_photo', 'Источник данных': 'edu_data_from', 'Примечание (сюда входит пояснение про сломанный инвентарь)': 'edu_add_inf', 'контакты по обратной связи_безопасность': 'edu_contact'}
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Emoji columns found: ['🙂\xa0Эмоциялық жағдай / Эмоциональное состояние', '🤝\xa0Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения', '🚫\xa0Буллинг / кибербуллинг', '📖\xa0Оқудағы мәселелер / Проблемы в обучении', '⚠️\xa0Дағдарыстық жағдайлар / Кризисные ситуации', '💬\xa0Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация', '📌\xa0Басқа / Прочее']
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Column '🙂 Эмоциялық жағдай / Эмоциональное состояние' sample data: [3, 2, 1]
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Column '🤝 Қақтығыстар және қарым-қатынастар / Конфликты и взаимоотношения' sample data: [5, 3, 2]
+2025-09-01 00:43:45,372 - INFO - P3 Debug - Column '🚫 Буллинг / кибербуллинг' sample data: [3, 5, 4]
+2025-09-01 00:43:45,373 - INFO - P3 Debug - Column '📖 Оқудағы мәселелер / Проблемы в обучении' sample data: [4, 4, 1]
+2025-09-01 00:43:45,373 - INFO - P3 Debug - Column '⚠️ Дағдарыстық жағдайлар / Кризисные ситуации' sample data: [1.0, nan, 2.0]
+2025-09-01 00:43:45,373 - INFO - P3 Debug - Column '💬 Профилактикалық әңгіме / консультация / Профилактическая беседа / консультация' sample data: [1.0, nan, 5.0]
+2025-09-01 00:43:45,373 - INFO - P3 Debug - Column '📌 Басқа / Прочее' sample data: [nan, nan, 5.0]
+2025-09-01 00:43:45,373 - INFO - Sheet P3: Mapped 16 columns
+2025-09-01 00:43:45,381 - INFO - Successfully inserted 8 rows into table p3
+2025-09-01 00:43:45,381 - INFO - Processing sheet Q1 -> table q1
+2025-09-01 00:43:45,382 - INFO - Sheet Q1: Mapped 16 columns
+2025-09-01 00:43:45,396 - INFO - Successfully inserted 30 rows into table q1
+2025-09-01 00:43:45,396 - INFO - Processing sheet Q2 -> table q2
+2025-09-01 00:43:45,396 - INFO - Sheet Q2: Mapped 15 columns
+2025-09-01 00:43:45,409 - INFO - Successfully inserted 22 rows into table q2
+2025-09-01 00:43:45,409 - INFO - Processing sheet Q3 -> table q3
+2025-09-01 00:43:45,409 - INFO - Sheet Q3: Mapped 15 columns
+2025-09-01 00:43:45,419 - INFO - Successfully inserted 14 rows into table q3
+2025-09-01 00:43:45,419 - INFO - Processing sheet Q4 -> table q4
+2025-09-01 00:43:45,419 - INFO - Sheet Q4: Mapped 12 columns
+2025-09-01 00:43:45,428 - INFO - Successfully inserted 18 rows into table q4
+2025-09-01 00:43:45,428 - INFO - Processing sheet Q5 -> table q5
+2025-09-01 00:43:45,429 - INFO - Sheet Q5: Mapped 8 columns
+2025-09-01 00:43:45,435 - INFO - Successfully inserted 1 rows into table q5
+2025-09-01 00:43:45,435 - INFO - Processing sheet S1 -> table s1
+2025-09-01 00:43:45,435 - INFO - Sheet S1: Mapped 16 columns
+2025-09-01 00:43:45,439 - WARNING - Truncating long text in s1: [{"name":"image_Ержан Жиренбай.jpg","link":"https:...
+2025-09-01 00:43:45,467 - INFO - Successfully inserted 91 rows into table s1
+2025-09-01 00:43:45,467 - INFO - Processing sheet S2 -> table s2
+2025-09-01 00:43:45,468 - INFO - Sheet S2: Mapped 17 columns
+2025-09-01 00:43:45,480 - INFO - Successfully inserted 24 rows into table s2
+2025-09-01 00:43:45,480 - INFO - Processing sheet S3 -> table s3
+2025-09-01 00:43:45,480 - INFO - Sheet S3: Mapped 17 columns
+2025-09-01 00:43:45,491 - INFO - Successfully inserted 19 rows into table s3
+2025-09-01 00:43:45,491 - INFO - Processing sheet S4 -> table s4
+2025-09-01 00:43:45,491 - INFO - Sheet S4: Mapped 13 columns
+2025-09-01 00:43:45,496 - WARNING - Truncating long text in s4: [{"name":"17557482241511191039183376660974_Балкан ...
+2025-09-01 00:43:45,496 - WARNING - Truncating long text in s4: [{"name":"17557482241511191039183376660974_Балкан ...
+2025-09-01 00:43:45,508 - INFO - Successfully inserted 43 rows into table s4
+2025-09-01 00:43:45,509 - INFO - Processing sheet S5 -> table s5
+2025-09-01 00:43:45,509 - INFO - Sheet S5: Mapped 13 columns
+2025-09-01 00:43:45,523 - INFO - Successfully inserted 29 rows into table s5
+2025-09-01 00:43:45,523 - INFO - Processing sheet S6 -> table s6
+2025-09-01 00:43:45,523 - INFO - Sheet S6: Mapped 12 columns
+2025-09-01 00:43:45,536 - INFO - Successfully inserted 32 rows into table s6
+2025-09-01 00:43:45,537 - INFO - Processing sheet S7 -> table s7
+2025-09-01 00:43:45,537 - INFO - Sheet S7: Mapped 12 columns
+2025-09-01 00:43:45,546 - INFO - Successfully inserted 15 rows into table s7
+2025-09-01 00:43:45,546 - INFO - Processing sheet S8 -> table s8
+2025-09-01 00:43:45,547 - INFO - Sheet S8: Mapped 10 columns
+2025-09-01 00:43:45,554 - INFO - Successfully inserted 13 rows into table s8
+2025-09-01 00:43:45,554 - INFO - Import completed successfully. Total rows inserted: 408
