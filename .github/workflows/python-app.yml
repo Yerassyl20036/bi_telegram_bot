@@ -55,52 +55,68 @@ jobs:
         script: |
           set -e
           
-          echo "🚀 Starting deployment..."
+          echo "� Diagnostic check..."
+          echo "Current user: $(whoami)"
+          echo "Current directory: $(pwd)"
+          echo "Home directory: $HOME"
+          
+          # Check if project directory exists
+          if [ -d "~/bi_telegram_bot" ]; then
+            echo "✅ Project directory exists"
+          else
+            echo "❌ Project directory not found, creating it..."
+            mkdir -p ~/bi_telegram_bot
+          fi
           
           # Navigate to project directory
-          cd ~/bi_telegram_bot || { echo "❌ Project directory not found"; exit 1; }
+          cd ~/bi_telegram_bot
+          echo "📍 Now in: $(pwd)"
           
-          # Stop existing services gracefully
-          echo "⏹️ Stopping existing services..."
+          # Check if it's a git repository
+          if [ -d ".git" ]; then
+            echo "✅ Git repository exists"
+          else
+            echo "🔄 Cloning repository..."
+            cd ~
+            git clone https://github.com/Yerassyl20036/bi_telegram_bot.git || echo "⚠️ Clone failed, continuing..."
+            cd ~/bi_telegram_bot
+          fi
+          
+          # Check Docker
+          echo "🐳 Checking Docker..."
+          docker --version || echo "❌ Docker not available"
+          docker-compose --version || echo "❌ Docker Compose not available"
+          
+          # Quick deployment
+          echo "🚀 Starting deployment..."
+          
+          # Stop existing services
+          echo "⏹️ Stopping services..."
           pkill -f "python.*main.py" || true
           pkill -f "python.*photo_server.py" || true
           
-          # Stop Docker containers quickly
-          docker-compose down --timeout 10 || true
-          
           # Pull latest changes
-          echo "📥 Pulling latest changes..."
-          git fetch origin
-          git reset --hard origin/main
+          echo "📥 Updating code..."
+          git fetch origin || echo "⚠️ Git fetch failed"
+          git reset --hard origin/main || echo "⚠️ Git reset failed"
           
-          # Copy VPS environment file
-          echo "🔧 Setting up environment..."
-          [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
+          # Setup environment
+          echo "🔧 Environment setup..."
+          [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ No .env.vps found"
           
-          # Start Docker services
-          echo "🐳 Starting Docker services..."
-          docker-compose up -d
+          # Start minimal services
+          echo "🐳 Starting Docker..."
+          docker-compose down --timeout 5 || true
+          docker-compose up -d || echo "⚠️ Docker start failed"
           
-          # Quick database check (don't wait too long)
-          echo "⏳ Checking database..."
-          sleep 10
-          docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot || echo "⚠️ Database not ready yet, continuing..."
+          # Install dependencies
+          echo "📦 Dependencies..."
+          python3 -m pip install --user -q -r requirements.txt || echo "⚠️ Pip install failed"
           
-          # Install Python dependencies (use cache when possible)
-          echo "📦 Installing Python dependencies..."
-          python3 -m pip install --user --no-warn-script-location -r requirements.txt
-          
-          # Start services
-          echo "📸 Starting photo server..."
+          # Start Python services
+          echo "� Starting services..."
           nohup python3 photo_server.py > photo_server.log 2>&1 &
-          
-          echo "🤖 Starting Telegram bot..."
           nohup python3 main.py > bot.log 2>&1 &
           
-          # Quick verification
-          sleep 3
           echo "✅ Deployment completed!"
-          
-          # Show status
-          docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "(postgres|grafana)" || true
-          echo "Services: Bot=$(pgrep -f "python.*main.py" >/dev/null && echo "✅" || echo "❌") Photo=$(pgrep -f "python.*photo_server.py" >/dev/null && echo "✅" || echo "❌")"
+          echo "Status: $(date)"
