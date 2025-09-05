@@ -51,7 +51,7 @@ jobs:
         key: ${{ secrets.VPS_SSH_KEY }}
         port: ${{ secrets.VPS_PORT }}
         timeout: 30s
-        command_timeout: 5m
+        command_timeout: 10m
         script: |
           set -e
           
@@ -64,21 +64,9 @@ jobs:
           echo "⏹️ Stopping existing services..."
           pkill -f "python.*main.py" || true
           pkill -f "python.*photo_server.py" || true
-          sleep 2
           
-          # Stop Docker containers if running
-          if [ -f "docker-compose.yml" ]; then
-            docker-compose down || true
-          fi
-          
-          # Quick backup (skip if taking too long)
-          echo "💾 Creating database backup..."
-          if docker ps -q --filter "name=power_bi_postgres" | grep -q .; then
-            docker-compose up -d postgres
-            sleep 5
-            timeout 30 docker exec power_bi_postgres pg_dump -U bot_user power_bi_bot > "backup_$(date +%Y%m%d_%H%M%S).sql" || echo "⚠️ Backup skipped due to timeout"
-            docker-compose down || true
-          fi
+          # Stop Docker containers quickly
+          docker-compose down --timeout 10 || true
           
           # Pull latest changes
           echo "📥 Pulling latest changes..."
@@ -87,32 +75,20 @@ jobs:
           
           # Copy VPS environment file
           echo "🔧 Setting up environment..."
-          if [ -f ".env.vps" ]; then
-            cp .env.vps .env
-          else
-            echo "⚠️ .env.vps not found, using existing .env"
-          fi
+          [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
           
           # Start Docker services
           echo "🐳 Starting Docker services..."
           docker-compose up -d
           
-          # Wait for database with shorter timeout
-          echo "⏳ Waiting for database..."
-          for i in {1..30}; do
-            if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot 2>/dev/null; then
-              echo "✅ Database is ready"
-              break
-            fi
-            if [ $i -eq 30 ]; then
-              echo "❌ Database timeout - continuing anyway"
-            fi
-            sleep 2
-          done
+          # Quick database check (don't wait too long)
+          echo "⏳ Checking database..."
+          sleep 10
+          docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot || echo "⚠️ Database not ready yet, continuing..."
           
-          # Install Python dependencies
+          # Install Python dependencies (use cache when possible)
           echo "📦 Installing Python dependencies..."
-          python3 -m pip install --user -r requirements.txt || echo "⚠️ Some packages may have failed to install"
+          python3 -m pip install --user --no-warn-script-location -r requirements.txt
           
           # Start services
           echo "📸 Starting photo server..."
@@ -122,12 +98,9 @@ jobs:
           nohup python3 main.py > bot.log 2>&1 &
           
           # Quick verification
-          sleep 5
-          echo "✅ Services started!"
+          sleep 3
+          echo "✅ Deployment completed!"
           
-          # Final status check
-          docker-compose ps | head -10
-          echo "Bot running: $(pgrep -f "python.*main.py" > /dev/null && echo "✅ YES" || echo "❌ NO")"
-          echo "Photo server running: $(pgrep -f "python.*photo_server.py" > /dev/null && echo "✅ YES" || echo "❌ NO")"
-          
-          echo "🎉 Deployment completed!"
+          # Show status
+          docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "(postgres|grafana)" || true
+          echo "Services: Bot=$(pgrep -f "python.*main.py" >/dev/null && echo "✅" || echo "❌") Photo=$(pgrep -f "python.*photo_server.py" >/dev/null && echo "✅" || echo "❌")"
