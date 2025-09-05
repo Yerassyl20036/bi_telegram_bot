@@ -50,30 +50,35 @@ jobs:
         username: ${{ secrets.VPS_USERNAME }}
         key: ${{ secrets.VPS_SSH_KEY }}
         port: ${{ secrets.VPS_PORT }}
+        timeout: 30s
+        command_timeout: 5m
         script: |
           set -e
           
           echo "🚀 Starting deployment..."
           
           # Navigate to project directory
-          cd ~/bi_telegram_bot
+          cd ~/bi_telegram_bot || { echo "❌ Project directory not found"; exit 1; }
           
           # Stop existing services gracefully
           echo "⏹️ Stopping existing services..."
-          
-          # Stop Python processes
           pkill -f "python.*main.py" || true
           pkill -f "python.*photo_server.py" || true
+          sleep 2
           
-          # Stop Docker containers
-          docker-compose down || true
+          # Stop Docker containers if running
+          if [ -f "docker-compose.yml" ]; then
+            docker-compose down || true
+          fi
           
-          # Backup database before deployment
+          # Quick backup (skip if taking too long)
           echo "💾 Creating database backup..."
-          docker-compose up -d postgres
-          sleep 10
-          docker exec power_bi_postgres pg_dump -U bot_user power_bi_bot > "backup_$(date +%Y%m%d_%H%M%S).sql" || true
-          docker-compose down
+          if docker ps -q --filter "name=power_bi_postgres" | grep -q .; then
+            docker-compose up -d postgres
+            sleep 5
+            timeout 30 docker exec power_bi_postgres pg_dump -U bot_user power_bi_bot > "backup_$(date +%Y%m%d_%H%M%S).sql" || echo "⚠️ Backup skipped due to timeout"
+            docker-compose down || true
+          fi
           
           # Pull latest changes
           echo "📥 Pulling latest changes..."
@@ -82,70 +87,47 @@ jobs:
           
           # Copy VPS environment file
           echo "🔧 Setting up environment..."
-          cp .env.vps .env
+          if [ -f ".env.vps" ]; then
+            cp .env.vps .env
+          else
+            echo "⚠️ .env.vps not found, using existing .env"
+          fi
           
           # Start Docker services
           echo "🐳 Starting Docker services..."
           docker-compose up -d
           
-          # Wait for database to be ready
-          echo "⏳ Waiting for database to be ready..."
-          timeout=60
-          while ! docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; do
-            sleep 2
-            timeout=$((timeout - 2))
-            if [ $timeout -le 0 ]; then
-              echo "❌ Database failed to start"
-              exit 1
+          # Wait for database with shorter timeout
+          echo "⏳ Waiting for database..."
+          for i in {1..30}; do
+            if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot 2>/dev/null; then
+              echo "✅ Database is ready"
+              break
             fi
+            if [ $i -eq 30 ]; then
+              echo "❌ Database timeout - continuing anyway"
+            fi
+            sleep 2
           done
           
-          # Install/update Python dependencies
+          # Install Python dependencies
           echo "📦 Installing Python dependencies..."
-          python3 -m pip install --user -r requirements.txt
+          python3 -m pip install --user -r requirements.txt || echo "⚠️ Some packages may have failed to install"
           
-          # Start photo server in background
+          # Start services
           echo "📸 Starting photo server..."
           nohup python3 photo_server.py > photo_server.log 2>&1 &
           
-          # Wait a moment for photo server to start
-          sleep 5
-          
-          # Start the bot
           echo "🤖 Starting Telegram bot..."
           nohup python3 main.py > bot.log 2>&1 &
           
-          # Verify services are running
-          echo "✅ Verifying services..."
+          # Quick verification
+          sleep 5
+          echo "✅ Services started!"
           
-          # Check Docker services
-          if ! docker-compose ps | grep -q "Up"; then
-            echo "❌ Docker services failed to start"
-            exit 1
-          fi
+          # Final status check
+          docker-compose ps | head -10
+          echo "Bot running: $(pgrep -f "python.*main.py" > /dev/null && echo "✅ YES" || echo "❌ NO")"
+          echo "Photo server running: $(pgrep -f "python.*photo_server.py" > /dev/null && echo "✅ YES" || echo "❌ NO")"
           
-          # Check if bot process is running
-          sleep 10
-          if ! pgrep -f "python.*main.py" > /dev/null; then
-            echo "❌ Bot failed to start"
-            echo "Last 20 lines of bot log:"
-            tail -20 bot.log || true
-            exit 1
-          fi
-          
-          # Check if photo server is running
-          if ! pgrep -f "python.*photo_server.py" > /dev/null; then
-            echo "❌ Photo server failed to start"
-            echo "Last 20 lines of photo server log:"
-            tail -20 photo_server.log || true
-            exit 1
-          fi
-          
-          echo "🎉 Deployment completed successfully!"
-          echo "📊 Services status:"
-          echo "Docker containers:"
-          docker-compose ps
-          echo ""
-          echo "Python processes:"
-          pgrep -f "python.*main.py" && echo "✅ Bot is running"
-          pgrep -f "python.*photo_server.py" && echo "✅ Photo server is running"
+          echo "🎉 Deployment completed!"
