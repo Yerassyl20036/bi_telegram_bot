@@ -1,4 +1,4 @@
-name: Build and Deploy Telegram Bot
+name: CI/CD Pipeline
 
 on:
   push:
@@ -7,146 +7,95 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
-  PYTHON_VERSION: '3.11'
-
-
-
 jobs:
   build:
-    name: Build and Test
+    name: 🔨 Build and Test
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
+    - name: 📥 Checkout Repository
       uses: actions/checkout@v4
     
-    - name: Set up Python
+    - name: 🐍 Set up Python 3.11
       uses: actions/setup-python@v4
       with:
-        python-version: ${{ env.PYTHON_VERSION }}
-        cache: 'pip'
+        python-version: '3.11'
     
-    - name: Install dependencies
+    - name: 📦 Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest flake8 black
     
-    - name: Lint with flake8
+    - name: ✅ Validate Python Files
       run: |
-        # Stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # Exit-zero treats all errors as warnings
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=120 --statistics
-      continue-on-error: true
+        python -c "import py_compile; py_compile.compile('main.py', doraise=True)"
+        python -c "import py_compile; py_compile.compile('photo_server.py', doraise=True)"
+        python -c "import py_compile; py_compile.compile('excel_to_postgres.py', doraise=True)"
+        echo "✅ All Python files are valid"
     
-    - name: Format check with black
-      run: |
-        black --check --diff .
-      continue-on-error: true
-    
-    - name: Validate Python syntax
-      run: |
-        python -m py_compile main.py
-        python -m py_compile photo_server.py
-        python -m py_compile excel_to_postgres.py
-    
-    - name: Check environment variables template
-      run: |
-        echo "Checking required environment variables are documented..."
-        if [ ! -f .env.example ] && [ ! -f README.md ]; then
-          echo "⚠️  Consider adding .env.example or documenting required environment variables in README.md"
-        fi
-    
-    - name: Validate Docker Compose
+    - name: 🐳 Validate Docker Compose
       run: |
         docker-compose config
-    
-    - name: Test database initialization scripts
-      run: |
-        echo "Validating SQL scripts syntax..."
-        for sql_file in init-db/*.sql; do
-          if [ -f "$sql_file" ]; then
-            echo "Checking $sql_file"
-            # Basic SQL syntax check (checks for common issues)
-            if grep -q ";" "$sql_file"; then
-              echo "✅ $sql_file appears to have valid SQL structure"
-            else
-              echo "⚠️  $sql_file might be missing semicolons"
-            fi
-          fi
-        done
+        echo "✅ Docker Compose configuration is valid"
 
   deploy:
-    name: Deploy to VPS
+    name: 🚀 Deploy to VPS
     runs-on: ubuntu-latest
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     
     steps:
-    - name: Checkout code
+    - name: 📥 Checkout Repository
       uses: actions/checkout@v4
     
-    - name: Setup SSH
+    - name: 🔐 Setup SSH Connection
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_KEY }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+        ssh-keyscan -p $VPS_PORT $VPS_HOST >> ~/.ssh/known_hosts
+        echo "✅ SSH setup completed"
     
-    - name: Test SSH Connection
+    - name: 🧪 Test SSH Connection
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "echo 'SSH connection successful'"
+        ssh -i ~/.ssh/id_rsa -p $VPS_PORT $VPS_USER@$VPS_HOST "echo 'SSH connection successful'"
     
-    - name: Create project directory on VPS
+    - name: 📁 Prepare VPS Environment
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          mkdir -p ~/bi_telegram_bot
-          mkdir -p ~/bi_telegram_bot/backups
-          mkdir -p ~/bi_telegram_bot/photos
-          mkdir -p ~/bi_telegram_bot/logs
-        "
+        ssh -i ~/.ssh/id_rsa -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
+          # Create project directories
+          mkdir -p ~/bi_telegram_bot/{backups,photos,logs}
+          
+          # Stop existing services
+          cd ~/bi_telegram_bot 2>/dev/null || exit 0
+          docker-compose down 2>/dev/null || true
+          pkill -f 'python.*main.py' 2>/dev/null || true
+          pkill -f 'python.*photo_server.py' 2>/dev/null || true
+          
+          echo "✅ VPS environment prepared"
+        EOF
     
-    - name: Stop existing services
-      run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          cd ~/bi_telegram_bot || exit 0
-          
-          echo '🛑 Stopping existing services...'
-          
-          # Stop Docker containers if they exist
-          if [ -f docker-compose.yml ]; then
-            docker-compose down || echo 'No containers to stop'
-          fi
-          
-          # Stop Python processes
-          pkill -f 'python.*main.py' || echo 'No main.py process to stop'
-          pkill -f 'python.*photo_server.py' || echo 'No photo_server.py process to stop'
-          
-          echo '✅ Services stopped'
-        "
-    
-    - name: Backup database
-      run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          cd ~/bi_telegram_bot
-          
-          # Create backup if database exists
-          if docker ps -q -f name=power_bi_postgres; then
-            echo '📦 Creating database backup...'
-            TIMESTAMP=\$(date +%Y%m%d_%H%M%S)
-            docker exec power_bi_postgres pg_dump -U bot_user power_bi_bot > backups/backup_\${TIMESTAMP}.sql || echo 'Backup failed, continuing...'
-            echo '✅ Database backup completed'
-          else
-            echo 'ℹ️  No existing database to backup'
-          fi
-        "
-    
-    - name: Sync files to VPS
+    - name: 📤 Deploy Files to VPS
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
         rsync -avz --delete \
-          -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }}" \
+          -e "ssh -i ~/.ssh/id_rsa -p $VPS_PORT" \
           --exclude='.git' \
           --exclude='__pycache__' \
           --exclude='*.pyc' \
@@ -154,24 +103,63 @@ jobs:
           --exclude='backups/' \
           --exclude='photos/' \
           --exclude='.github' \
-          ./ ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }}:~/bi_telegram_bot/
+          ./ $VPS_USER@$VPS_HOST:~/bi_telegram_bot/
+        echo "✅ Files deployed successfully"
     
-    - name: Setup environment and permissions
+    - name: 🔧 Setup VPS Environment
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+        ssh -i ~/.ssh/id_rsa -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
           cd ~/bi_telegram_bot
           
-          # Make scripts executable
-          chmod +x deploy.sh health_check.sh rollback.sh || echo 'Some scripts not found'
+          # Install Docker if not present
+          if ! command -v docker &> /dev/null; then
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
+            systemctl enable docker
+            systemctl start docker
+          fi
           
-          # Create .env file if it doesn't exist
+          # Install Docker Compose if not present
+          if ! command -v docker-compose &> /dev/null; then
+            curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+            chmod +x /usr/local/bin/docker-compose
+          fi
+          
+          # Install Python and dependencies
+          apt update -qq
+          apt install -y python3 python3-pip python3-venv
+          
+          # Create virtual environment and install dependencies
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          
+          # Make scripts executable
+          chmod +x *.sh 2>/dev/null || true
+          
+          echo "✅ Environment setup completed"
+        EOF
+    
+    - name: ⚙️ Create Environment Configuration
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
+      run: |
+        ssh -i ~/.ssh/id_rsa -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
+          cd ~/bi_telegram_bot
+          
           if [ ! -f .env ]; then
-            echo 'Creating default .env file...'
-            cat > .env << 'EOF'
+            cat > .env << 'ENVEOF'
 # Telegram Bot Configuration
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 
-# Database Configuration  
+# Database Configuration
 DATABASE_URL=postgresql://bot_user:bot_password@localhost:5432/power_bi_bot
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
@@ -187,174 +175,86 @@ PHOTO_DIR=/root/bi_telegram_bot/photos
 PHOTO_URL_BASE=http://localhost:8080/photos
 PHOTO_SERVER_PORT=8080
 MAX_PHOTO_SIZE=10485760
-
-# Grafana Configuration
-GF_SECURITY_ADMIN_PASSWORD=admin123
-GF_SECURITY_ADMIN_USER=admin
-EOF
-            echo '⚠️  Please update .env file with your actual configuration'
-          fi
-        "
-    
-    - name: Install Docker and Docker Compose
-      run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          # Check if Docker is installed
-          if ! command -v docker &> /dev/null; then
-            echo '🐳 Installing Docker...'
-            curl -fsSL https://get.docker.com -o get-docker.sh
-            sh get-docker.sh
-            systemctl enable docker
-            systemctl start docker
-            echo '✅ Docker installed'
-          else
-            echo '✅ Docker already installed'
+ENVEOF
+            echo "⚠️  Created default .env file - please update with your credentials"
           fi
           
-          # Check if Docker Compose is installed
-          if ! command -v docker-compose &> /dev/null; then
-            echo '🐳 Installing Docker Compose...'
-            curl -L \"https://github.com/docker/compose/releases/latest/download/docker-compose-\$(uname -s)-\$(uname -m)\" -o /usr/local/bin/docker-compose
-            chmod +x /usr/local/bin/docker-compose
-            echo '✅ Docker Compose installed'
-          else
-            echo '✅ Docker Compose already installed'
-          fi
-        "
+          echo "✅ Configuration ready"
+        EOF
     
-    - name: Install Python dependencies
+    - name: 🚀 Start Services
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+        ssh -i ~/.ssh/id_rsa -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
           cd ~/bi_telegram_bot
           
-          # Check if Python 3 is installed
-          if ! command -v python3 &> /dev/null; then
-            echo '🐍 Installing Python 3...'
-            apt update
-            apt install -y python3 python3-pip python3-venv
-          fi
-          
-          # Create virtual environment
-          python3 -m venv venv || echo 'Virtual environment already exists'
-          source venv/bin/activate
-          
-          # Install/update pip and dependencies
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          
-          echo '✅ Python dependencies installed'
-        "
-    
-    - name: Start services
-      run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          cd ~/bi_telegram_bot
-          
-          echo '🚀 Starting services...'
-          
-          # Start Docker services (PostgreSQL and Grafana)
+          # Start Docker services
           docker-compose up -d
+          sleep 30  # Wait for database to start
           
-          # Wait for database to be ready
-          echo '⏳ Waiting for database to be ready...'
-          sleep 30
-          
-          # Check if database is healthy
-          docker-compose ps
-          
-          echo '✅ Docker services started'
-        "
-    
-    - name: Start Python applications
-      run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          cd ~/bi_telegram_bot
+          # Start Python applications
           source venv/bin/activate
           
-          # Start photo server in background
-          echo '📸 Starting photo server...'
+          # Start photo server
           nohup python photo_server.py > logs/photo_server.log 2>&1 &
-          echo \$! > photo_server.pid
+          echo $! > photo_server.pid
           
-          # Wait a moment
           sleep 5
           
-          # Start main bot in background
-          echo '🤖 Starting Telegram bot...'
+          # Start main bot
           nohup python main.py > logs/bot.log 2>&1 &
-          echo \$! > bot.pid
+          echo $! > bot.pid
           
-          echo '✅ Python applications started'
-        "
+          echo "✅ All services started"
+        EOF
     
-    - name: Health check
+    - name: 🏥 Health Check
+      env:
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        VPS_PORT: ${{ secrets.VPS_PORT }}
+        VPS_USER: ${{ secrets.VPS_USERNAME }}
       run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
+        ssh -i ~/.ssh/id_rsa -p $VPS_PORT $VPS_USER@$VPS_HOST << 'EOF'
           cd ~/bi_telegram_bot
           
-          echo '🏥 Performing health checks...'
-          
-          # Check Docker containers
-          echo '📊 Docker containers status:'
+          echo "📊 Service Status:"
           docker-compose ps
           
-          # Check Python processes
-          echo '🐍 Python processes:'
-          ps aux | grep -E '(main\.py|photo_server\.py)' | grep -v grep || echo 'No Python processes found'
+          echo "🐍 Python Processes:"
+          ps aux | grep -E "(main\.py|photo_server\.py)" | grep -v grep || echo "No Python processes found"
           
-          # Check if ports are listening
-          echo '🔌 Port status:'
-          netstat -tlnp | grep -E ':(5432|3000|8080)' || echo 'Some ports may not be listening yet'
+          echo "🔌 Port Status:"
+          netstat -tlnp | grep -E ":(5432|3000|8080)" || echo "Ports may still be starting"
           
-          # Check log files
-          echo '📝 Recent logs:'
-          if [ -f logs/bot.log ]; then
-            echo 'Bot log (last 10 lines):'
-            tail -10 logs/bot.log
-          fi
-          
-          if [ -f logs/photo_server.log ]; then
-            echo 'Photo server log (last 10 lines):'
-            tail -10 logs/photo_server.log
-          fi
-          
-          echo '✅ Health check completed'
-        "
+          echo "✅ Health check completed"
+        EOF
     
-    - name: Run health check script
-      run: |
-        ssh -i ~/.ssh/id_rsa -p ${{ secrets.VPS_PORT }} ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_HOST }} "
-          cd ~/bi_telegram_bot
-          
-          if [ -f health_check.sh ]; then
-            echo '🔍 Running custom health check...'
-            ./health_check.sh || echo 'Health check script failed'
-          fi
-        "
-    
-    - name: Cleanup SSH
+    - name: 🧹 Cleanup
       if: always()
       run: |
         rm -f ~/.ssh/id_rsa
 
   notify:
-    name: Notify Deployment Status
+    name: 📢 Notify Status
     runs-on: ubuntu-latest
     needs: [build, deploy]
     if: always()
     
     steps:
-    - name: Notify Success
+    - name: ✅ Success Notification
       if: needs.deploy.result == 'success'
       run: |
-        echo "✅ Deployment successful!"
-        echo "🚀 Telegram bot is now running on the VPS"
-        echo "📊 Grafana dashboard: http://${{ secrets.VPS_HOST }}"
-        echo "📸 Photo server: http://${{ secrets.VPS_HOST }}:8080"
+        echo "🎉 Deployment Successful!"
+        echo "🤖 Telegram bot is running"
+        echo "📊 Grafana: http://${{ secrets.VPS_HOST }}"
+        echo "📸 Photos: http://${{ secrets.VPS_HOST }}:8080"
     
-    - name: Notify Failure
+    - name: ❌ Failure Notification
       if: needs.deploy.result == 'failure' || needs.build.result == 'failure'
       run: |
-        echo "❌ Deployment failed!"
-        echo "Please check the logs and fix any issues before retrying."
+        echo "💥 Deployment Failed!"
+        echo "Check the logs above for details"
         exit 1
