@@ -1,7 +1,7 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+# CI/CD Pipeline for Telegram Bot with PostgreSQL and Grafana
+# This workflow will test, lint, and deploy the application to VPS
 
-name: Python application
+name: CI/CD Pipeline
 
 on:
   push:
@@ -13,27 +13,143 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
+    
     steps:
     - uses: actions/checkout@v4
+    
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+    
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
     - name: Test with pytest
       run: |
         pytest
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        port: ${{ secrets.VPS_PORT }}
+        script: |
+          set -e
+          
+          echo "🚀 Starting deployment..."
+          
+          # Navigate to project directory
+          cd ~/bi_telegram_bot
+          
+          # Stop existing services gracefully
+          echo "⏹️ Stopping existing services..."
+          
+          # Stop Python processes
+          pkill -f "python.*main.py" || true
+          pkill -f "python.*photo_server.py" || true
+          
+          # Stop Docker containers
+          docker-compose down || true
+          
+          # Backup database before deployment
+          echo "💾 Creating database backup..."
+          docker-compose up -d postgres
+          sleep 10
+          docker exec power_bi_postgres pg_dump -U bot_user power_bi_bot > "backup_$(date +%Y%m%d_%H%M%S).sql" || true
+          docker-compose down
+          
+          # Pull latest changes
+          echo "📥 Pulling latest changes..."
+          git fetch origin
+          git reset --hard origin/main
+          
+          # Copy VPS environment file
+          echo "🔧 Setting up environment..."
+          cp .env.vps .env
+          
+          # Start Docker services
+          echo "🐳 Starting Docker services..."
+          docker-compose up -d
+          
+          # Wait for database to be ready
+          echo "⏳ Waiting for database to be ready..."
+          timeout=60
+          while ! docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; do
+            sleep 2
+            timeout=$((timeout - 2))
+            if [ $timeout -le 0 ]; then
+              echo "❌ Database failed to start"
+              exit 1
+            fi
+          done
+          
+          # Install/update Python dependencies
+          echo "📦 Installing Python dependencies..."
+          python3 -m pip install --user -r requirements.txt
+          
+          # Start photo server in background
+          echo "📸 Starting photo server..."
+          nohup python3 photo_server.py > photo_server.log 2>&1 &
+          
+          # Wait a moment for photo server to start
+          sleep 5
+          
+          # Start the bot
+          echo "🤖 Starting Telegram bot..."
+          nohup python3 main.py > bot.log 2>&1 &
+          
+          # Verify services are running
+          echo "✅ Verifying services..."
+          
+          # Check Docker services
+          if ! docker-compose ps | grep -q "Up"; then
+            echo "❌ Docker services failed to start"
+            exit 1
+          fi
+          
+          # Check if bot process is running
+          sleep 10
+          if ! pgrep -f "python.*main.py" > /dev/null; then
+            echo "❌ Bot failed to start"
+            echo "Last 20 lines of bot log:"
+            tail -20 bot.log || true
+            exit 1
+          fi
+          
+          # Check if photo server is running
+          if ! pgrep -f "python.*photo_server.py" > /dev/null; then
+            echo "❌ Photo server failed to start"
+            echo "Last 20 lines of photo server log:"
+            tail -20 photo_server.log || true
+            exit 1
+          fi
+          
+          echo "🎉 Deployment completed successfully!"
+          echo "📊 Services status:"
+          echo "Docker containers:"
+          docker-compose ps
+          echo ""
+          echo "Python processes:"
+          pgrep -f "python.*main.py" && echo "✅ Bot is running"
+          pgrep -f "python.*photo_server.py" && echo "✅ Photo server is running"
