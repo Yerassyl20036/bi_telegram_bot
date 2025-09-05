@@ -50,8 +50,6 @@ jobs:
         timeout: 30s
         command_timeout: 10m
         script: |
-          # Remove set -e to prevent early exits and handle errors manually
-          
           echo "🔌 SSH Connection: ✅ SUCCESSFUL"
           
           # Navigate to project directory
@@ -62,28 +60,51 @@ jobs:
             exit 1
           fi
           
-          # Stop existing services
+          # Stop existing services with better error handling
           echo "⏹️ Stopping existing services..."
-          pkill -f "python.*main.py" || true
-          pkill -f "python.*photo_server.py" || true
-          docker-compose down --timeout 10 || true
+          
+          # Stop Python processes
+          if pkill -f "python.*main.py"; then
+            echo "🤖 Stopped main.py: ✅"
+          else
+            echo "🤖 No main.py running: ✅"
+          fi
+          
+          if pkill -f "python.*photo_server.py"; then
+            echo "📸 Stopped photo_server.py: ✅"
+          else
+            echo "📸 No photo_server.py running: ✅"
+          fi
+          
+          # Stop Docker with sudo and shorter timeout
+          echo "🐳 Stopping Docker containers..."
+          if sudo docker-compose down --timeout 5; then
+            echo "🐳 Docker Stop: ✅ SUCCESS"
+          else
+            echo "🐳 Docker Stop: ⚠️ FAILED (continuing anyway)"
+          fi
           
           # Pull latest changes
           echo "📥 Pulling latest changes..."
-          git fetch origin && git reset --hard origin/main
+          if git fetch origin && git reset --hard origin/main; then
+            echo "📥 Git Update: ✅ SUCCESS"
+          else
+            echo "📥 Git Update: ❌ FAILED"
+            exit 1
+          fi
           
           # Setup environment
           [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
           
-          # Start Docker services and check database
+          # Start Docker services with sudo
           echo "🐳 Starting Docker services..."
-          if docker-compose up -d; then
+          if sudo docker-compose up -d; then
             echo "🐳 Docker Services: ✅ STARTED"
             
             # Wait and check database
             echo "⏳ Waiting for database..."
             sleep 15
-            if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
+            if sudo docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
               echo "🗄️ Database: ✅ READY"
             else
               echo "🗄️ Database: ❌ NOT READY"
@@ -95,6 +116,7 @@ jobs:
           fi
           
           # Install dependencies
+          echo "📦 Installing dependencies..."
           python3 -m pip install --user --no-warn-script-location -r requirements.txt
           
           # Start main.py
