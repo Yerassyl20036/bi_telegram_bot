@@ -1,12 +1,7 @@
-# CI/CD Pipeline for Telegram Bot with PostgreSQL and Grafana
-# This workflow will lint and deploy the application to VPS
-
 name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 permissions:
@@ -32,9 +27,7 @@ jobs:
     
     - name: Lint with flake8
       run: |
-        # stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
   deploy:
@@ -55,68 +48,119 @@ jobs:
         script: |
           set -e
           
-          echo "� Diagnostic check..."
+          # Diagnostic information
+          echo "Diagnostic check..."
           echo "Current user: $(whoami)"
           echo "Current directory: $(pwd)"
           echo "Home directory: $HOME"
           
+          # Define project directory
+          PROJECT_DIR="$HOME/bi_telegram_bot"
+          
           # Check if project directory exists
-          if [ -d "~/bi_telegram_bot" ]; then
-            echo "✅ Project directory exists"
+          if [ ! -d "$PROJECT_DIR" ]; then
+            echo "Project directory not found, creating it..."
+            mkdir -p "$PROJECT_DIR"
+            cd "$PROJECT_DIR"
+            git clone https://github.com/Yerassyl20036/bi_telegram_bot.git .
           else
-            echo "❌ Project directory not found, creating it..."
-            mkdir -p ~/bi_telegram_bot
+            cd "$PROJECT_DIR"
           fi
           
-          # Navigate to project directory
-          cd ~/bi_telegram_bot
-          echo "📍 Now in: $(pwd)"
-          
-          # Check if it's a git repository
-          if [ -d ".git" ]; then
-            echo "✅ Git repository exists"
-          else
-            echo "🔄 Cloning repository..."
-            cd ~
-            git clone https://github.com/Yerassyl20036/bi_telegram_bot.git || echo "⚠️ Clone failed, continuing..."
-            cd ~/bi_telegram_bot
-          fi
+          echo "Now in directory: $(pwd)"
           
           # Check Docker
-          echo "🐳 Checking Docker..."
-          docker --version || echo "❌ Docker not available"
-          docker-compose --version || echo "❌ Docker Compose not available"
+          echo "Checking Docker..."
+          docker --version
+          docker-compose --version
           
-          # Quick deployment
-          echo "🚀 Starting deployment..."
+          echo "Starting deployment..."
           
-          # Stop existing services
-          echo "⏹️ Stopping services..."
-          pkill -f "python.*main.py" || true
-          pkill -f "python.*photo_server.py" || true
+          # Stop existing services using systemd if available
+          if command -v systemctl >/dev/null 2>&1; then
+            echo "Stopping services using systemd..."
+            sudo systemctl stop telegram-bot.service 2>/dev/null || true
+            sudo systemctl stop photo-server.service 2>/dev/null || true
+          else
+            echo "Stopping services using pkill..."
+            pkill -f "python.*main.py" 2>/dev/null || true
+            pkill -f "python.*photo_server.py" 2>/dev/null || true
+            sleep 2
+          fi
           
           # Pull latest changes
-          echo "📥 Updating code..."
-          git fetch origin || echo "⚠️ Git fetch failed"
-          git reset --hard origin/main || echo "⚠️ Git reset failed"
+          echo "Updating code..."
+          git fetch origin
+          git reset --hard origin/main
           
           # Setup environment
-          echo "🔧 Environment setup..."
-          [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ No .env.vps found"
+          echo "Environment setup..."
+          if [ -f ".env.vps" ]; then
+            cp .env.vps .env
+            echo "Copied .env.vps to .env"
+          else
+            echo "No .env.vps found, using existing .env if available"
+          fi
           
-          # Start minimal services
-          echo "🐳 Starting Docker..."
-          docker-compose down --timeout 5 || true
-          docker-compose up -d || echo "⚠️ Docker start failed"
+          # Start Docker services
+          echo "Starting Docker services..."
+          docker-compose down --timeout 5 2>/dev/null || true
+          docker-compose up -d
           
           # Install dependencies
-          echo "📦 Dependencies..."
-          python3 -m pip install --user -q -r requirements.txt || echo "⚠️ Pip install failed"
+          echo "Installing dependencies..."
+          python3 -m pip install --user -q -r requirements.txt
           
-          # Start Python services
-          echo "� Starting services..."
-          nohup python3 photo_server.py > photo_server.log 2>&1 &
-          nohup python3 main.py > bot.log 2>&1 &
+          # Start Python services using systemd if available
+          if command -v systemctl >/dev/null 2>&1; then
+            echo "Setting up systemd services..."
+            
+            # Create telegram bot service
+            sudo tee /etc/systemd/system/telegram-bot.service > /dev/null <<EOF
+[Unit]
+Description=Telegram Bot Service
+After=network.target
+
+[Service]
+User=$USER
+WorkingDirectory=$PROJECT_DIR
+ExecStart=/usr/bin/python3 $PROJECT_DIR/main.py
+Restart=always
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+EOF
+            
+            # Create photo server service
+            sudo tee /etc/systemd/system/photo-server.service > /dev/null <<EOF
+[Unit]
+Description=Photo Server Service
+After=network.target
+
+[Service]
+User=$USER
+WorkingDirectory=$PROJECT_DIR
+ExecStart=/usr/bin/python3 $PROJECT_DIR/photo_server.py
+Restart=always
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+EOF
+            
+            # Reload systemd and start services
+            sudo systemctl daemon-reload
+            sudo systemctl enable telegram-bot.service photo-server.service
+            sudo systemctl start telegram-bot.service photo-server.service
+            
+            echo "Services started using systemd"
+          else
+            echo "Starting services using nohup..."
+            nohup python3 photo_server.py > photo_server.log 2>&1 &
+            nohup python3 main.py > bot.log 2>&1 &
+            echo "Services started using nohup"
+          fi
           
-          echo "✅ Deployment completed!"
-          echo "Status: $(date)"
+          echo "Deployment completed successfully!"
+          echo "Timestamp: $(date)"
