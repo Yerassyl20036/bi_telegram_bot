@@ -50,54 +50,74 @@ jobs:
         timeout: 30s
         command_timeout: 10m
         script: |
-          set -e
+          # Remove set -e to prevent early exits and handle errors manually
           
-          echo "🚀 Starting deployment..."
+          echo "🔌 SSH Connection: ✅ SUCCESSFUL"
           
           # Navigate to project directory
-          cd ~/bi_telegram_bot || { echo "❌ Project directory not found"; exit 1; }
+          if cd ~/bi_telegram_bot; then
+            echo "📁 Project Directory: ✅ FOUND"
+          else
+            echo "📁 Project Directory: ❌ FAILED"
+            exit 1
+          fi
           
-          # Stop existing services gracefully
+          # Stop existing services
           echo "⏹️ Stopping existing services..."
           pkill -f "python.*main.py" || true
           pkill -f "python.*photo_server.py" || true
-          
-          # Stop Docker containers quickly
           docker-compose down --timeout 10 || true
           
           # Pull latest changes
           echo "📥 Pulling latest changes..."
-          git fetch origin
-          git reset --hard origin/main
+          git fetch origin && git reset --hard origin/main
           
-          # Copy VPS environment file
-          echo "🔧 Setting up environment..."
+          # Setup environment
           [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
           
-          # Start Docker services
+          # Start Docker services and check database
           echo "🐳 Starting Docker services..."
-          docker-compose up -d
+          if docker-compose up -d; then
+            echo "🐳 Docker Services: ✅ STARTED"
+            
+            # Wait and check database
+            echo "⏳ Waiting for database..."
+            sleep 15
+            if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
+              echo "🗄️ Database: ✅ READY"
+            else
+              echo "🗄️ Database: ❌ NOT READY"
+              exit 1
+            fi
+          else
+            echo "🐳 Docker Services: ❌ FAILED"
+            exit 1
+          fi
           
-          # Quick database check (don't wait too long)
-          echo "⏳ Checking database..."
-          sleep 10
-          docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot || echo "⚠️ Database not ready yet, continuing..."
-          
-          # Install Python dependencies (use cache when possible)
-          echo "📦 Installing Python dependencies..."
+          # Install dependencies
           python3 -m pip install --user --no-warn-script-location -r requirements.txt
           
-          # Start services
-          echo "📸 Starting photo server..."
-          nohup python3 photo_server.py > photo_server.log 2>&1 &
-          
+          # Start main.py
           echo "🤖 Starting Telegram bot..."
           nohup python3 main.py > bot.log 2>&1 &
+          sleep 5
+          if pgrep -f "python.*main.py" >/dev/null; then
+            echo "🤖 Main Bot: ✅ LAUNCHED"
+          else
+            echo "🤖 Main Bot: ❌ FAILED TO START"
+            exit 1
+          fi
           
-          # Quick verification
+          # Start photo_server.py
+          echo "📸 Starting photo server..."
+          nohup python3 photo_server.py > photo_server.log 2>&1 &
           sleep 3
-          echo "✅ Deployment completed!"
+          if pgrep -f "python.*photo_server.py" >/dev/null; then
+            echo "📸 Photo Server: ✅ LAUNCHED"
+          else
+            echo "📸 Photo Server: ❌ FAILED TO START"
+            exit 1
+          fi
           
-          # Show status
-          docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "(postgres|grafana)" || true
-          echo "Services: Bot=$(pgrep -f "python.*main.py" >/dev/null && echo "✅" || echo "❌") Photo=$(pgrep -f "python.*photo_server.py" >/dev/null && echo "✅" || echo "❌")"
+          echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
+          echo "All services are running correctly."
