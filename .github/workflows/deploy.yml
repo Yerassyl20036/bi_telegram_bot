@@ -83,18 +83,31 @@ jobs:
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
-        continue-on-error: false
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: ${{ secrets.VPS_PORT }}
-          timeout: 120s
-          command_timeout: 20m
-          debug: true
+          timeout: 300s
+          command_timeout: 30m
           script: |
-            # Don't exit on errors - handle them manually
-            set +e
+            #!/bin/bash
+            
+            # Function to handle exit codes properly
+            handle_exit_code() {
+              local exit_code=$1
+              local operation=$2
+              if [ $exit_code -eq 0 ]; then
+                echo "✅ $operation: SUCCESS"
+                return 0
+              elif [ $exit_code -eq 143 ]; then
+                echo "✅ $operation: SUCCESS (SIGTERM - normal termination)"
+                return 0
+              else
+                echo "❌ $operation: FAILED (exit code: $exit_code)"
+                return $exit_code
+              fi
+            }
             
             echo "🚀 Starting deployment process..."
             echo "Deployment triggered by commit: ${{ github.sha }}"
@@ -117,42 +130,27 @@ jobs:
               echo "✅ Found project directory"
             fi
             
-            # Stop existing services gracefully (ignore SIGTERM exit codes)
+            # Stop existing services gracefully
             echo "⏹️ Stopping existing services..."
             
-            # Kill Python processes (143 is normal SIGTERM)
+            # Kill Python processes
             echo "🔪 Stopping Python processes..."
             pkill -f "python.*main.py" 2>/dev/null
-            KILL_EXIT_CODE=$?
-            if [ $KILL_EXIT_CODE -eq 0 ] || [ $KILL_EXIT_CODE -eq 143 ]; then
-              echo "✅ main.py processes stopped"
-            else
-              echo "ℹ️ No main.py processes were running"
-            fi
+            handle_exit_code $? "Stop main.py processes"
             
-            pkill -f "python.*photo_server.py" 2>/dev/null  
-            KILL_EXIT_CODE=$?
-            if [ $KILL_EXIT_CODE -eq 0 ] || [ $KILL_EXIT_CODE -eq 143 ]; then
-              echo "✅ photo_server.py processes stopped"
-            else
-              echo "ℹ️ No photo_server.py processes were running"
-            fi
+            pkill -f "python.*photo_server.py" 2>/dev/null
+            handle_exit_code $? "Stop photo_server.py processes"
             
-            # Stop Docker containers (ignore SIGTERM)
+            # Stop Docker containers
             if [ -f "docker-compose.yml" ]; then
               echo "🐳 Stopping Docker containers..."
               docker-compose down --timeout 30 2>/dev/null
-              DOCKER_EXIT_CODE=$?
-              if [ $DOCKER_EXIT_CODE -eq 0 ] || [ $DOCKER_EXIT_CODE -eq 143 ]; then
-                echo "✅ Docker containers stopped successfully"
-              else
-                echo "ℹ️ No Docker containers were running"
-              fi
+              handle_exit_code $? "Stop Docker containers"
             fi
             
             # Clean up Docker resources
             echo "🧹 Cleaning up Docker resources..."
-            docker container prune -f --filter "until=1h" 2>/dev/null || true
+            docker container prune -f 2>/dev/null || true
             docker image prune -f --filter "until=24h" 2>/dev/null || true
             
             # Login to Docker Hub
@@ -190,110 +188,142 @@ jobs:
             fi
             echo "✅ Photo server image pulled successfully"
             
+            # Tag images for local use (fix naming mismatch)
+            echo "🏷️ Tagging images for local use..."
+            docker tag "$BOT_IMAGE" bi-telegram-bot:latest
+            docker tag "$PHOTO_IMAGE" bi-photo-server:latest
+            echo "✅ Images tagged successfully"
+            
             # Set up environment
             echo "🔧 Setting up environment..."
             if [ -f ".env.vps" ]; then
               cp .env.vps .env
               echo "✅ Copied VPS environment configuration"
+            else
+              echo "⚠️ No .env.vps found, using existing .env"
             fi
-            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
             
-            # Create necessary directories
+            # Ensure required directories exist
             mkdir -p photos
             
-            # Start services in stages for better reliability
+            # Verify docker-compose.yml exists and is valid
+            if [ ! -f "docker-compose.yml" ]; then
+              echo "❌ docker-compose.yml not found"
+              exit 1
+            fi
+            
+            echo "📄 Validating docker-compose.yml..."
+            docker-compose config
+            if [ $? -ne 0 ]; then
+              echo "❌ docker-compose.yml is invalid"
+              exit 1
+            fi
+            echo "✅ docker-compose.yml is valid"
+            
+            # Start services step by step
             echo "🐳 Starting services..."
             
             # Start PostgreSQL first
+            echo "🗄️ Starting PostgreSQL..."
             docker-compose up -d postgres
-            echo "Waiting for PostgreSQL to start..."
-            sleep 15
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to start PostgreSQL"
+              exit 1
+            fi
+            echo "✅ PostgreSQL container started"
             
             # Wait for PostgreSQL to be ready
+            echo "⏳ Waiting for PostgreSQL to be ready..."
             POSTGRES_READY=false
-            for i in {1..20}; do
+            for i in {1..30}; do
               if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot 2>/dev/null; then
                 echo "✅ PostgreSQL is ready"
                 POSTGRES_READY=true
                 break
               fi
-              echo "Waiting for PostgreSQL... ($i/20)"
-              sleep 3
+              echo "Waiting for PostgreSQL... ($i/30)"
+              sleep 2
             done
             
             if [ "$POSTGRES_READY" != "true" ]; then
-              echo "❌ PostgreSQL failed to become ready, checking logs..."
+              echo "❌ PostgreSQL failed to become ready"
+              echo "PostgreSQL logs:"
               docker logs power_bi_postgres --tail 20
-              echo "Continuing deployment anyway..."
+              exit 1
             fi
             
-            # Start other services
-            echo "Starting bot, photo server, and Grafana..."
-            docker-compose up -d telegram-bot photo-server grafana
-            echo "Waiting for all services to stabilize..."
-            sleep 30
+            # Start Telegram Bot
+            echo "🤖 Starting Telegram Bot..."
+            docker-compose up -d telegram-bot
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to start Telegram Bot"
+              docker-compose logs telegram-bot
+              exit 1
+            fi
+            echo "✅ Telegram Bot container started"
             
-            # Final verification with detailed health checks
+            # Wait for bot to be ready
+            sleep 10
+            if ! docker ps --filter "name=bi-telegram-bot" --filter "status=running" --quiet | grep -q .; then
+              echo "❌ Telegram bot container is not running"
+              echo "Bot logs:"
+              docker logs bi-telegram-bot --tail 20
+              exit 1
+            fi
+            echo "✅ Telegram Bot is running"
+            
+            # Start Photo Server
+            echo "📸 Starting Photo Server..."
+            docker-compose up -d photo-server
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to start Photo Server"
+              docker-compose logs photo-server
+              exit 1
+            fi
+            echo "✅ Photo Server container started"
+            
+            # Wait for photo server to be ready
+            sleep 10
+            if ! docker ps --filter "name=bi-photo-server" --filter "status=running" --quiet | grep -q .; then
+              echo "❌ Photo server container is not running"
+              echo "Photo server logs:"
+              docker logs bi-photo-server --tail 20
+              exit 1
+            fi
+            echo "✅ Photo Server is running"
+            
+            # Start Grafana
+            echo "📊 Starting Grafana..."
+            docker-compose up -d grafana
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to start Grafana"
+              docker-compose logs grafana
+              exit 1
+            fi
+            echo "✅ Grafana container started"
+            
+            # Final verification
             echo "🔍 Final health checks..."
+            sleep 15
             
             # Check all containers
             echo "📊 Container status:"
             docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
             
-            # Check PostgreSQL health
-            if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot 2>/dev/null; then
-              echo "✅ PostgreSQL is healthy"
-            else
-              echo "❌ PostgreSQL health check failed"
-              docker logs power_bi_postgres --tail 10
-            fi
-            
-            # Check bot container
-            if docker ps --filter "name=bi-telegram-bot" --filter "status=running" --quiet | grep -q .; then
-              echo "✅ Telegram bot container is running"
-            else
-              echo "❌ Telegram bot container is not running"
-              docker logs bi-telegram-bot --tail 10 2>/dev/null || echo "No bot logs available"
-            fi
-            
-            # Check photo server
-            if docker ps --filter "name=bi-photo-server" --filter "status=running" --quiet | grep -q .; then
-              echo "✅ Photo server container is running"
-              # Test photo server endpoint
-              if curl -f http://localhost:8080/ 2>/dev/null; then
-                echo "✅ Photo server is responding"
-              else
-                echo "⚠️ Photo server may still be starting"
-              fi
-            else
-              echo "❌ Photo server container is not running"
-              docker logs bi-photo-server --tail 10 2>/dev/null || echo "No photo server logs available"
-            fi
-            
-            # Check Grafana
-            if docker ps --filter "name=power_bi_grafana" --filter "status=running" --quiet | grep -q .; then
-              echo "✅ Grafana container is running"
-            else
-              echo "❌ Grafana container is not running"
-              docker logs power_bi_grafana --tail 10 2>/dev/null || echo "No Grafana logs available"
-            fi
-            
+            # Count running containers
             RUNNING_CONTAINERS=$(docker ps --filter "status=running" --format "{{.Names}}" | grep -E "power_bi_postgres|bi-telegram-bot|bi-photo-server|power_bi_grafana" | wc -l)
             echo "📊 Running containers: $RUNNING_CONTAINERS/4"
             
-            if [ "$RUNNING_CONTAINERS" -ge 3 ]; then
-              echo "✅ Core services are operational"
-            else
-              echo "⚠️ Some services failed to start properly"
-              echo "🔍 Checking for any error logs..."
-              docker-compose logs --tail 5
+            if [ "$RUNNING_CONTAINERS" -lt 4 ]; then
+              echo "❌ Not all containers are running"
+              echo "🔍 Checking container logs..."
+              docker-compose logs --tail 10
+              exit 1
             fi
             
-            # Final verification
-            echo "📊 Final service status:"
-            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
-            
             echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
+            echo "✅ All $RUNNING_CONTAINERS containers are running"
+            echo ""
             echo "🌐 Services available at:"
             echo "   - Grafana: http://$(hostname -I | awk '{print $1}'):3000"
             echo "   - Photo Server: http://$(hostname -I | awk '{print $1}'):8080"

@@ -23,7 +23,7 @@ services:
       - app-network
 
   telegram-bot:
-    image: ${DOCKER_USERNAME:-local}/bi-telegram-bot:latest
+    image: bi-telegram-bot:latest
     container_name: bi-telegram-bot
     depends_on:
       postgres:
@@ -43,7 +43,7 @@ services:
       start_period: 45s
 
   photo-server:
-    image: ${DOCKER_USERNAME:-local}/bi-photo-server:latest
+    image: bi-photo-server:latest
     container_name: bi-photo-server
     depends_on:
       postgres:
