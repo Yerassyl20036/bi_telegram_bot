@@ -4,42 +4,68 @@ services:
     container_name: power_bi_postgres
     environment:
       POSTGRES_USER: bot_user
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-your_password}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-bot_password}
       POSTGRES_DB: power_bi_bot
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=en_US.UTF-8 --lc-ctype=en_US.UTF-8"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d:ro
     ports:
       - "5432:5432"
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bot_user -d power_bi_bot"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - app-network
 
   telegram-bot:
-    image: bi-telegram-bot:latest
+    image: ${DOCKER_USERNAME:-local}/bi-telegram-bot:latest
     container_name: bi-telegram-bot
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     env_file:
       - .env
+    environment:
+      - DATABASE_URL=postgresql://bot_user:${DB_PASSWORD:-bot_password}@postgres:5432/power_bi_bot
     restart: unless-stopped
     networks:
-      - default
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import psycopg2; psycopg2.connect('postgresql://bot_user:${DB_PASSWORD:-bot_password}@postgres:5432/power_bi_bot')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
 
   photo-server:
-    image: bi-photo-server:latest
+    image: ${DOCKER_USERNAME:-local}/bi-photo-server:latest
     container_name: bi-photo-server
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     env_file:
       - .env
+    environment:
+      - PHOTO_DIR=/app/photos
+      - PHOTO_SERVER_PORT=8080
     ports:
-      - "8000:8000"
+      - "8080:8080"
+    volumes:
+      - photo_data:/app/photos
     restart: unless-stopped
     networks:
-      - default
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
   grafana:
     image: grafana/grafana:latest
@@ -51,7 +77,20 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     restart: unless-stopped
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 volumes:
   postgres_data:
   grafana_data:
+  photo_data:
+
+networks:
+  app-network:
+    driver: bridge
