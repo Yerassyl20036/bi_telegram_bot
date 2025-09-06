@@ -129,9 +129,15 @@ jobs:
               exit 1
             fi
             
-            # Update environment file
+            # Tag images for local use
+            echo "🏷️ Tagging images for local use..."
+            docker tag ${{ secrets.DOCKER_USERNAME }}/bi-telegram-bot:latest bi-telegram-bot:latest
+            docker tag ${{ secrets.DOCKER_USERNAME }}/bi-photo-server:latest bi-photo-server:latest
+            
+            # Update environment file and set Docker username
             echo "🔧 Setting up environment..."
             [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
+            echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
             
             # Start services using docker-compose
             echo "🐳 Starting all services..."
@@ -154,6 +160,7 @@ jobs:
                 echo "🤖 Main Bot Container: ✅ RUNNING"
               else
                 echo "🤖 Main Bot Container: ❌ NOT RUNNING"
+                docker logs bi-telegram-bot || true
                 exit 1
               fi
               
@@ -162,6 +169,7 @@ jobs:
                 echo "📸 Photo Server Container: ✅ RUNNING"
               else
                 echo "📸 Photo Server Container: ❌ NOT RUNNING"
+                docker logs bi-photo-server || true
                 exit 1
               fi
               
