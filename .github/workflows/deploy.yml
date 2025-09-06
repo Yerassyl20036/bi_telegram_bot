@@ -34,112 +34,145 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-  deploy:
+  build:
     needs: lint
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Set up Python (for any build steps if needed)
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.10"
+
+      # 3. Build Docker image for main bot
+      - name: Build Docker image for main bot
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/bi-telegram-bot:latest -f Dockerfile.bot .
+
+      # 4. Build Docker image for photo server
+      - name: Build Docker image for photo server
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/bi-photo-server:latest -f Dockerfile.photo .
+
+      # 5. Login to Docker Hub
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      # 6. Push Docker images
+      - name: Push main bot Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/bi-telegram-bot:latest
+
+      - name: Push photo server Docker image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/bi-photo-server:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
     
     steps:
-    - name: Deploy to VPS
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.VPS_HOST }}
-        username: ${{ secrets.VPS_USERNAME }}
-        key: ${{ secrets.VPS_SSH_KEY }}
-        port: ${{ secrets.VPS_PORT }}
-        timeout: 30s
-        command_timeout: 10m
-        script: |
-          echo "🔌 SSH Connection: ✅ SUCCESSFUL"
-          
-          # Navigate to project directory
-          if cd ~/bi_telegram_bot; then
-            echo "📁 Project Directory: ✅ FOUND"
-          else
-            echo "📁 Project Directory: ❌ FAILED"
-            exit 1
-          fi
-          
-          # Stop existing services with better error handling
-          echo "⏹️ Stopping existing services..."
-          
-          # Stop Python processes
-          if pkill -f "python.*main.py"; then
-            echo "🤖 Stopped main.py: ✅"
-          else
-            echo "🤖 No main.py running: ✅"
-          fi
-          
-          if pkill -f "python.*photo_server.py"; then
-            echo "📸 Stopped photo_server.py: ✅"
-          else
-            echo "📸 No photo_server.py running: ✅"
-          fi
-          
-          # Stop Docker with sudo and shorter timeout
-          echo "🐳 Stopping Docker containers..."
-          if sudo docker-compose down --timeout 5; then
-            echo "🐳 Docker Stop: ✅ SUCCESS"
-          else
-            echo "🐳 Docker Stop: ⚠️ FAILED (continuing anyway)"
-          fi
-          
-          # Pull latest changes
-          echo "📥 Pulling latest changes..."
-          if git fetch origin && git reset --hard origin/main; then
-            echo "📥 Git Update: ✅ SUCCESS"
-          else
-            echo "📥 Git Update: ❌ FAILED"
-            exit 1
-          fi
-          
-          # Setup environment
-          [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
-          
-          # Start Docker services with sudo
-          echo "🐳 Starting Docker services..."
-          if sudo docker-compose up -d; then
-            echo "🐳 Docker Services: ✅ STARTED"
+      # Deploy to VPS via SSH
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          timeout: 30s
+          command_timeout: 10m
+          script: |
+            echo "🔌 SSH Connection: ✅ SUCCESSFUL"
             
-            # Wait and check database
-            echo "⏳ Waiting for database..."
-            sleep 15
-            if sudo docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
-              echo "🗄️ Database: ✅ READY"
+            # Navigate to project directory
+            if cd ~/bi_telegram_bot; then
+              echo "📁 Project Directory: ✅ FOUND"
             else
-              echo "🗄️ Database: ❌ NOT READY"
+              echo "📁 Project Directory: ❌ FAILED"
               exit 1
             fi
-          else
-            echo "🐳 Docker Services: ❌ FAILED"
-            exit 1
-          fi
-          
-          # Install dependencies
-          echo "📦 Installing dependencies..."
-          python3 -m pip install --user --no-warn-script-location -r requirements.txt
-          
-          # Start main.py
-          echo "🤖 Starting Telegram bot..."
-          nohup python3 main.py > bot.log 2>&1 &
-          sleep 5
-          if pgrep -f "python.*main.py" >/dev/null; then
-            echo "🤖 Main Bot: ✅ LAUNCHED"
-          else
-            echo "🤖 Main Bot: ❌ FAILED TO START"
-            exit 1
-          fi
-          
-          # Start photo_server.py
-          echo "📸 Starting photo server..."
-          nohup python3 photo_server.py > photo_server.log 2>&1 &
-          sleep 3
-          if pgrep -f "python.*photo_server.py" >/dev/null; then
-            echo "📸 Photo Server: ✅ LAUNCHED"
-          else
-            echo "📸 Photo Server: ❌ FAILED TO START"
-            exit 1
-          fi
-          
-          echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
-          echo "All services are running correctly."
+            
+            # Login to Docker Hub
+            echo "🔐 Logging into Docker Hub..."
+            echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            if [ $? -eq 0 ]; then
+              echo "🔐 Docker Login: ✅ SUCCESS"
+            else
+              echo "🔐 Docker Login: ❌ FAILED"
+              exit 1
+            fi
+            
+            # Stop existing containers
+            echo "⏹️ Stopping existing containers..."
+            if docker-compose down --timeout 10; then
+              echo "🐳 Containers Stopped: ✅ SUCCESS"
+            else
+              echo "🐳 Containers Stopped: ⚠️ FAILED (continuing anyway)"
+            fi
+            
+            # Pull latest images from Docker Hub
+            echo "📥 Pulling latest Docker images..."
+            if docker pull ${{ secrets.DOCKER_USERNAME }}/bi-telegram-bot:latest; then
+              echo "🤖 Main Bot Image: ✅ PULLED"
+            else
+              echo "🤖 Main Bot Image: ❌ FAILED"
+              exit 1
+            fi
+            
+            if docker pull ${{ secrets.DOCKER_USERNAME }}/bi-photo-server:latest; then
+              echo "📸 Photo Server Image: ✅ PULLED"
+            else
+              echo "📸 Photo Server Image: ❌ FAILED"
+              exit 1
+            fi
+            
+            # Update environment file
+            echo "🔧 Setting up environment..."
+            [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
+            
+            # Start services using docker-compose
+            echo "🐳 Starting all services..."
+            if docker-compose up -d; then
+              echo "🐳 Docker Services: ✅ STARTED"
+              
+              # Wait and check database
+              echo "⏳ Waiting for database..."
+              sleep 20
+              if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
+                echo "🗄️ Database: ✅ READY"
+              else
+                echo "🗄️ Database: ❌ NOT READY"
+                exit 1
+              fi
+              
+              # Check if bot container is running
+              sleep 10
+              if docker ps | grep -q "bi-telegram-bot"; then
+                echo "🤖 Main Bot Container: ✅ RUNNING"
+              else
+                echo "🤖 Main Bot Container: ❌ NOT RUNNING"
+                exit 1
+              fi
+              
+              # Check if photo server container is running
+              if docker ps | grep -q "bi-photo-server"; then
+                echo "📸 Photo Server Container: ✅ RUNNING"
+              else
+                echo "📸 Photo Server Container: ❌ NOT RUNNING"
+                exit 1
+              fi
+              
+            else
+              echo "🐳 Docker Services: ❌ FAILED"
+              exit 1
+            fi
+            
+            echo "🎉 DEPLOYMENT COMPLETED SUCCESSFULLY!"
+            echo "All services are running in Docker containers."
+            
+            # Show running containers
+            echo "📊 Container Status:"
+            docker ps --format "table {{.Names}}\t{{.Status}}" | grep -E "(postgres|bot|photo)" || true
