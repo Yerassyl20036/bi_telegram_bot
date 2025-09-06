@@ -116,7 +116,9 @@ jobs:
             # Stop existing services gracefully
             echo "⏹️  Stopping existing services..."
             if [ -f "docker-compose.yml" ]; then
-              docker-compose down --timeout 15 2>/dev/null || true
+              echo "Stopping Docker containers (exit code 143 is normal)..."
+              docker-compose down --timeout 30 2>&1 | grep -v "Process exited with status 143" || true
+              echo "✅ Services stopped successfully"
             fi
             
             # Clean up any orphaned processes
@@ -165,39 +167,83 @@ jobs:
             sleep 15
             
             # Wait for PostgreSQL to be ready
-            for i in {1..12}; do
+            POSTGRES_READY=false
+            for i in {1..20}; do
               if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot 2>/dev/null; then
                 echo "✅ PostgreSQL is ready"
+                POSTGRES_READY=true
                 break
               fi
-              echo "Waiting for PostgreSQL... ($i/12)"
-              sleep 5
+              echo "Waiting for PostgreSQL... ($i/20)"
+              sleep 3
             done
             
+            if [ "$POSTGRES_READY" != "true" ]; then
+              echo "❌ PostgreSQL failed to become ready, checking logs..."
+              docker logs power_bi_postgres --tail 20
+              echo "Continuing deployment anyway..."
+            fi
+            
             # Start other services
+            echo "Starting bot, photo server, and Grafana..."
             docker-compose up -d telegram-bot photo-server grafana
             echo "Waiting for all services to stabilize..."
-            sleep 20
+            sleep 30
             
-            # Final verification (non-blocking)
+            # Final verification with detailed health checks
             echo "🔍 Final health checks..."
             
-            # Check PostgreSQL (already verified above)
+            # Check all containers
+            echo "📊 Container status:"
+            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+            
+            # Check PostgreSQL health
             if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot 2>/dev/null; then
               echo "✅ PostgreSQL is healthy"
             else
-              echo "⚠️ PostgreSQL may still be starting"
+              echo "❌ PostgreSQL health check failed"
+              docker logs power_bi_postgres --tail 10
             fi
             
-            # Check containers are running
-            RUNNING_CONTAINERS=$(docker ps --filter "name=bi-" --filter "status=running" --format "{{.Names}}" | wc -l)
-            echo "📊 Running containers: $RUNNING_CONTAINERS"
-            
-            if [ "$RUNNING_CONTAINERS" -ge 2 ]; then
-              echo "✅ Core services are running"
+            # Check bot container
+            if docker ps --filter "name=bi-telegram-bot" --filter "status=running" --quiet | grep -q .; then
+              echo "✅ Telegram bot container is running"
             else
-              echo "⚠️ Some services may still be starting"
-              docker ps --filter "name=bi-" --format "table {{.Names}}\t{{.Status}}"
+              echo "❌ Telegram bot container is not running"
+              docker logs bi-telegram-bot --tail 10 2>/dev/null || echo "No bot logs available"
+            fi
+            
+            # Check photo server
+            if docker ps --filter "name=bi-photo-server" --filter "status=running" --quiet | grep -q .; then
+              echo "✅ Photo server container is running"
+              # Test photo server endpoint
+              if curl -f http://localhost:8080/ 2>/dev/null; then
+                echo "✅ Photo server is responding"
+              else
+                echo "⚠️ Photo server may still be starting"
+              fi
+            else
+              echo "❌ Photo server container is not running"
+              docker logs bi-photo-server --tail 10 2>/dev/null || echo "No photo server logs available"
+            fi
+            
+            # Check Grafana
+            if docker ps --filter "name=power_bi_grafana" --filter "status=running" --quiet | grep -q .; then
+              echo "✅ Grafana container is running"
+            else
+              echo "❌ Grafana container is not running"
+              docker logs power_bi_grafana --tail 10 2>/dev/null || echo "No Grafana logs available"
+            fi
+            
+            RUNNING_CONTAINERS=$(docker ps --filter "status=running" --format "{{.Names}}" | grep -E "power_bi_postgres|bi-telegram-bot|bi-photo-server|power_bi_grafana" | wc -l)
+            echo "📊 Running containers: $RUNNING_CONTAINERS/4"
+            
+            if [ "$RUNNING_CONTAINERS" -ge 3 ]; then
+              echo "✅ Core services are operational"
+            else
+              echo "⚠️ Some services failed to start properly"
+              echo "🔍 Checking for any error logs..."
+              docker-compose logs --tail 5
             fi
             
             # Final verification
