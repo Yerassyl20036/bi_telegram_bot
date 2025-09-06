@@ -83,6 +83,7 @@ jobs:
 
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v1.0.3
+        continue-on-error: false
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
@@ -92,6 +93,9 @@ jobs:
           command_timeout: 20m
           debug: true
           script: |
+            # Don't exit on errors - handle them manually
+            set +e
+            
             echo "🚀 Starting deployment process..."
             echo "Deployment triggered by commit: ${{ github.sha }}"
             
@@ -113,21 +117,43 @@ jobs:
               echo "✅ Found project directory"
             fi
             
-            # Stop existing services gracefully
-            echo "⏹️  Stopping existing services..."
-            if [ -f "docker-compose.yml" ]; then
-              echo "Stopping Docker containers (exit code 143 is normal)..."
-              docker-compose down --timeout 30 2>&1 | grep -v "Process exited with status 143" || true
-              echo "✅ Services stopped successfully"
+            # Stop existing services gracefully (ignore SIGTERM exit codes)
+            echo "⏹️ Stopping existing services..."
+            
+            # Kill Python processes (143 is normal SIGTERM)
+            echo "🔪 Stopping Python processes..."
+            pkill -f "python.*main.py" 2>/dev/null
+            KILL_EXIT_CODE=$?
+            if [ $KILL_EXIT_CODE -eq 0 ] || [ $KILL_EXIT_CODE -eq 143 ]; then
+              echo "✅ main.py processes stopped"
+            else
+              echo "ℹ️ No main.py processes were running"
             fi
             
-            # Clean up any orphaned processes
-            pkill -f "python.*main.py" 2>/dev/null || true
-            pkill -f "python.*photo_server.py" 2>/dev/null || true
+            pkill -f "python.*photo_server.py" 2>/dev/null  
+            KILL_EXIT_CODE=$?
+            if [ $KILL_EXIT_CODE -eq 0 ] || [ $KILL_EXIT_CODE -eq 143 ]; then
+              echo "✅ photo_server.py processes stopped"
+            else
+              echo "ℹ️ No photo_server.py processes were running"
+            fi
             
-            # Quick Docker cleanup (non-blocking)
+            # Stop Docker containers (ignore SIGTERM)
+            if [ -f "docker-compose.yml" ]; then
+              echo "🐳 Stopping Docker containers..."
+              docker-compose down --timeout 30 2>/dev/null
+              DOCKER_EXIT_CODE=$?
+              if [ $DOCKER_EXIT_CODE -eq 0 ] || [ $DOCKER_EXIT_CODE -eq 143 ]; then
+                echo "✅ Docker containers stopped successfully"
+              else
+                echo "ℹ️ No Docker containers were running"
+              fi
+            fi
+            
+            # Clean up Docker resources
             echo "🧹 Cleaning up Docker resources..."
-            docker container prune -f --filter "until=1h" || true
+            docker container prune -f --filter "until=1h" 2>/dev/null || true
+            docker image prune -f --filter "until=24h" 2>/dev/null || true
             
             # Login to Docker Hub
             echo "🔐 Logging into Docker Hub..."
@@ -136,16 +162,33 @@ jobs:
               echo "❌ Docker login failed"
               exit 1
             fi
+            echo "✅ Docker login successful"
             
             # Pull latest code
             echo "📥 Pulling latest code..."
             git fetch origin
             git reset --hard origin/main
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to update code"
+              exit 1
+            fi
+            echo "✅ Code updated successfully"
             
             # Pull latest Docker images
             echo "📥 Pulling Docker images..."
             docker pull "$BOT_IMAGE"
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to pull bot image"
+              exit 1
+            fi
+            echo "✅ Bot image pulled successfully"
+            
             docker pull "$PHOTO_IMAGE"
+            if [ $? -ne 0 ]; then
+              echo "❌ Failed to pull photo server image"
+              exit 1
+            fi
+            echo "✅ Photo server image pulled successfully"
             
             # Set up environment
             echo "🔧 Setting up environment..."
