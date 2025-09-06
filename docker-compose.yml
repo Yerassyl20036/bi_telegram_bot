@@ -18,26 +18,28 @@ services:
       retries: 5
 
   telegram-bot:
-    image: ${DOCKER_USERNAME:-local}/bi-telegram-bot:latest
+    image: bi-telegram-bot:latest
     container_name: bi-telegram-bot
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     env_file:
       - .env
     restart: unless-stopped
+    networks:
+      - default
 
   photo-server:
-    image: ${DOCKER_USERNAME:-local}/bi-photo-server:latest
+    image: bi-photo-server:latest
     container_name: bi-photo-server
     depends_on:
-      postgres:
-        condition: service_healthy
+      - postgres
     env_file:
       - .env
     ports:
       - "8000:8000"
     restart: unless-stopped
+    networks:
+      - default
 
   grafana:
     image: grafana/grafana:latest

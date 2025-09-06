@@ -105,13 +105,29 @@ jobs:
               exit 1
             fi
             
-            # Stop existing containers
-            echo "⏹️ Stopping existing containers..."
-            if docker-compose down --timeout 10; then
-              echo "🐳 Containers Stopped: ✅ SUCCESS"
-            else
-              echo "🐳 Containers Stopped: ⚠️ FAILED (continuing anyway)"
-            fi
+            # Stop ALL existing processes and containers
+            echo "⏹️ Stopping ALL existing services..."
+            
+            # Kill any existing Python processes (to avoid bot token conflicts)
+            echo "🔪 Killing existing Python processes..."
+            pkill -f "python.*main.py" || echo "No main.py processes found"
+            pkill -f "python.*photo_server.py" || echo "No photo_server.py processes found"
+            pkill -f "python3.*main.py" || echo "No python3 main.py processes found"
+            pkill -f "python3.*photo_server.py" || echo "No python3 photo_server.py processes found"
+            
+            # Stop and remove all existing containers
+            echo "🐳 Stopping Docker containers..."
+            docker-compose down --timeout 10 || echo "No docker-compose containers running"
+            docker stop $(docker ps -aq) 2>/dev/null || echo "No containers to stop"
+            docker rm $(docker ps -aq) 2>/dev/null || echo "No containers to remove"
+            
+            # Clean up Docker images and networks
+            echo "🧹 Cleaning up Docker..."
+            docker system prune -f || true
+            
+            # Pull latest code changes
+            echo "📥 Pulling latest code..."
+            git fetch origin && git reset --hard origin/main
             
             # Pull latest images from Docker Hub
             echo "📥 Pulling latest Docker images..."
@@ -139,39 +155,76 @@ jobs:
             [ -f ".env.vps" ] && cp .env.vps .env || echo "⚠️ Using existing .env"
             echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
             
-            # Start services using docker-compose
-            echo "🐳 Starting all services..."
-            if docker-compose up -d; then
-              echo "🐳 Docker Services: ✅ STARTED"
+            # Start only PostgreSQL first
+            echo "�️ Starting PostgreSQL..."
+            if docker-compose up -d postgres; then
+              echo "�️ PostgreSQL: ✅ STARTED"
               
-              # Wait and check database
-              echo "⏳ Waiting for database..."
-              sleep 20
-              if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
-                echo "🗄️ Database: ✅ READY"
-              else
-                echo "🗄️ Database: ❌ NOT READY"
+              # Wait for database to be ready
+              echo "⏳ Waiting for database to be ready..."
+              for i in {1..30}; do
+                if docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
+                  echo "🗄️ Database: ✅ READY"
+                  break
+                fi
+                echo "Waiting for database... ($i/30)"
+                sleep 2
+              done
+              
+              # Check if database is really ready
+              if ! docker exec power_bi_postgres pg_isready -U bot_user -d power_bi_bot; then
+                echo "🗄️ Database: ❌ NOT READY AFTER 60s"
                 exit 1
               fi
               
-              # Check if bot container is running
+            else
+              echo "🗄️ PostgreSQL: ❌ FAILED TO START"
+              exit 1
+            fi
+            
+            # Start Grafana
+            echo "📊 Starting Grafana..."
+            docker-compose up -d grafana
+            
+            # Start Telegram Bot
+            echo "🤖 Starting Telegram bot..."
+            if docker-compose up -d telegram-bot; then
+              echo "🤖 Bot Service: ✅ LAUNCHED"
+              
+              # Wait and check if bot container is running
               sleep 10
               if docker ps | grep -q "bi-telegram-bot"; then
                 echo "🤖 Main Bot Container: ✅ RUNNING"
               else
                 echo "🤖 Main Bot Container: ❌ NOT RUNNING"
-                docker logs bi-telegram-bot || true
+                echo "Bot logs:"
+                docker logs bi-telegram-bot 2>&1 || echo "No logs available"
                 exit 1
               fi
+            else
+              echo "🤖 Bot Service: ❌ FAILED TO START"
+              exit 1
+            fi
+            
+            # Start Photo Server
+            echo "📸 Starting photo server..."
+            if docker-compose up -d photo-server; then
+              echo "📸 Photo Service: ✅ LAUNCHED"
               
-              # Check if photo server container is running
+              # Wait and check if photo server container is running
+              sleep 5
               if docker ps | grep -q "bi-photo-server"; then
                 echo "📸 Photo Server Container: ✅ RUNNING"
               else
                 echo "📸 Photo Server Container: ❌ NOT RUNNING"
-                docker logs bi-photo-server || true
+                echo "Photo server logs:"
+                docker logs bi-photo-server 2>&1 || echo "No logs available"
                 exit 1
               fi
+            else
+              echo "📸 Photo Service: ❌ FAILED TO START"
+              exit 1
+            fi
               
             else
               echo "🐳 Docker Services: ❌ FAILED"
